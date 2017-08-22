@@ -184,14 +184,14 @@ describe Spree::InventoryUnit, type: :model do
     let(:quantity) { 2 }
     let(:line_item_additional_tax_total) { 10.00 }
     let(:line_item) do
-      build(:line_item, {
+      build_stubbed(:line_item, {
         quantity: quantity,
         additional_tax_total: line_item_additional_tax_total
       })
     end
 
     subject do
-      build(:inventory_unit, line_item: line_item)
+      build_stubbed(:inventory_unit, line_item: line_item)
     end
 
     it 'is the correct amount' do
@@ -203,14 +203,14 @@ describe Spree::InventoryUnit, type: :model do
     let(:quantity) { 2 }
     let(:line_item_included_tax_total) { 10.00 }
     let(:line_item) do
-      build(:line_item, {
+      build_stubbed(:line_item, {
         quantity: quantity,
         included_tax_total: line_item_included_tax_total
       })
     end
 
     subject do
-      build(:inventory_unit, line_item: line_item)
+      build_stubbed(:inventory_unit, line_item: line_item)
     end
 
     it 'is the correct amount' do
@@ -222,14 +222,14 @@ describe Spree::InventoryUnit, type: :model do
     let(:quantity) { 2 }
     let(:line_item_additional_tax_total) { 10.00 }
     let(:line_item) do
-      build(:line_item, {
+      build_stubbed(:line_item, {
         quantity: quantity,
         additional_tax_total: line_item_additional_tax_total
       })
     end
 
     subject do
-      build(:inventory_unit, line_item: line_item)
+      build_stubbed(:inventory_unit, line_item: line_item)
     end
 
     it 'is the correct amount' do
@@ -241,14 +241,14 @@ describe Spree::InventoryUnit, type: :model do
     let(:quantity) { 2 }
     let(:line_item_included_tax_total) { 10.00 }
     let(:line_item) do
-      build(:line_item, {
+      build_stubbed(:line_item, {
         quantity: quantity,
         included_tax_total: line_item_included_tax_total
       })
     end
 
     subject do
-      build(:inventory_unit, line_item: line_item)
+      build_stubbed(:inventory_unit, line_item: line_item)
     end
 
     it 'is the correct amount' do
