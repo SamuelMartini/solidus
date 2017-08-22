@@ -291,7 +291,7 @@ describe Spree::Order, type: :model do
         Spree::Config.order_merger_class = TestOrderMerger
       end
 
-      let(:user) { build(:user) }
+      let(:user) { build_stubbed(:user) }
 
       it 'uses the configured order merger' do
         expect(order1.merge!(order2, user)).to eq([order1, order2, user])
@@ -438,8 +438,8 @@ describe Spree::Order, type: :model do
   end
 
   describe "#tax_address" do
-    let(:order) { build(:order, ship_address: ship_address, bill_address: bill_address, store: store) }
-    let(:store) { build(:store) }
+    let(:order) { build_stubbed(:order, ship_address: ship_address, bill_address: bill_address, store: store) }
+    let(:store) { build_stubbed(:store) }
 
     before { Spree::Config[:tax_using_ship_address] = tax_using_ship_address }
     subject { order.tax_address }
@@ -466,8 +466,8 @@ describe Spree::Order, type: :model do
     end
 
     context "when the order has addresses" do
-      let(:ship_address) { build(:address) }
-      let(:bill_address) { build(:address) }
+      let(:ship_address) { build_stubbed(:address) }
+      let(:bill_address) { build_stubbed(:address) }
 
       context "when tax_using_ship_address is true" do
         let(:tax_using_ship_address) { true }
@@ -706,7 +706,7 @@ describe Spree::Order, type: :model do
   end
 
   describe "#generate_order_number" do
-    let(:order) { build(:order) }
+    let(:order) { build_stubbed(:order) }
 
     context "with default app configuration" do
       it 'calls the default order number generator' do
@@ -844,7 +844,7 @@ describe Spree::Order, type: :model do
       end
 
       context "and has an invalid bill address associated " do
-        let(:bill_address) { build(:address, firstname: nil) } # invalid address
+        let(:bill_address) { build_stubbed(:address, firstname: nil) } # invalid address
 
         it "does not associate any bill address" do
           expect { subject }.not_to change { order.bill_address }.from(nil)
@@ -852,7 +852,7 @@ describe Spree::Order, type: :model do
       end
 
       context "and has a valid address associated " do
-        let(:bill_address) { build(:address) }
+        let(:bill_address) { build_stubbed(:address) }
 
         it "does associate user bill address" do
           expect { subject }.to change { order.bill_address }.from(nil).to(bill_address)
@@ -866,7 +866,7 @@ describe Spree::Order, type: :model do
       end
 
       context "and has an invalid ship address associated " do
-        let(:ship_address) { build(:address, firstname: nil) } # invalid address
+        let(:ship_address) { build_stubbed(:address, firstname: nil) } # invalid address
 
         it "does not associate any ship address" do
           expect { subject }.not_to change { order.ship_address }.from(nil)
@@ -874,7 +874,7 @@ describe Spree::Order, type: :model do
       end
 
       context "and has a valid ship address associated" do
-        let(:ship_address) { build(:address) }
+        let(:ship_address) { build_stubbed(:address) }
 
         it "does associate user ship address" do
           expect { subject }.to change { order.ship_address }.from(nil).to(ship_address)
