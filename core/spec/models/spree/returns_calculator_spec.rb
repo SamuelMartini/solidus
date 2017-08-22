@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Spree
   describe ReturnsCalculator, type: :model do
-    let(:return_item) { build(:return_item) }
+    let(:return_item) { build_stubbed(:return_item) }
     subject { ReturnsCalculator.new }
 
     it 'compute_shipment must be overridden' do

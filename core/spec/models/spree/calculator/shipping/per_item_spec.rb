@@ -4,8 +4,8 @@ require 'shared_examples/calculator_shared_examples'
 module Spree
   module Calculator::Shipping
     describe PerItem, type: :model do
-      let(:variant1) { build(:variant) }
-      let(:variant2) { build(:variant) }
+      let(:variant1) { build_stubbed(:variant) }
+      let(:variant2) { build_stubbed(:variant) }
 
       it_behaves_like 'a calculator with a description'
 

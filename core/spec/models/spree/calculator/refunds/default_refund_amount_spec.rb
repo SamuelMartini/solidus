@@ -5,8 +5,8 @@ describe Spree::Calculator::Returns::DefaultRefundAmount, type: :model do
   let(:line_item_quantity) { 2 }
   let(:line_item_price) { 100.0 }
   let(:line_item) { create(:line_item, price: line_item_price, quantity: line_item_quantity) }
-  let(:inventory_unit) { build(:inventory_unit, order: order, line_item: line_item) }
-  let(:return_item) { build(:return_item, inventory_unit: inventory_unit ) }
+  let(:inventory_unit) { build_stubbed(:inventory_unit, order: order, line_item: line_item) }
+  let(:return_item) { build_stubbed(:return_item, inventory_unit: inventory_unit ) }
   let(:calculator) { Spree::Calculator::Returns::DefaultRefundAmount.new }
   let(:order) { line_item.order }
 

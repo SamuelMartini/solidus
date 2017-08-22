@@ -59,8 +59,8 @@ module Spree
         end
 
         context "doesn't track inventory levels" do
-          let(:variant) { build(:variant) }
-          let(:order) { build(:order_with_line_items, line_items_count: 1) }
+          let(:variant) { build_stubbed(:variant) }
+          let(:order) { build_stubbed(:order_with_line_items, line_items_count: 1) }
           let(:line_item) { order.line_items.first }
           let(:inventory_units) {
             Array.new(30) do

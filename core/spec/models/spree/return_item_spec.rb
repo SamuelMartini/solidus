@@ -461,7 +461,7 @@ describe Spree::ReturnItem, type: :model do
     let(:return_item) { create(:return_item, acceptance_status: acceptance_status) }
     let(:acceptance_status) { 'pending' }
 
-    before { return_item.reimbursement = build(:reimbursement) }
+    before { return_item.reimbursement = build_stubbed(:reimbursement) }
 
     subject { return_item }
 

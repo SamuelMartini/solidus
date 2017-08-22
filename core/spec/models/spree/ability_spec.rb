@@ -18,7 +18,7 @@ class FooAbility
 end
 
 describe Spree::Ability, type: :model do
-  let(:user) { build(:user) }
+  let(:user) { build_stubbed(:user) }
   let(:ability) { Spree::Ability.new(user) }
   let(:token) { nil }
 

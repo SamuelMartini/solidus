@@ -260,7 +260,7 @@ module Spree
         end
 
         it "does set the default: true flag" do
-          order = build(:order)
+          order = build_stubbed(:order)
           user.persist_order_address(order)
         end
       end
@@ -273,7 +273,7 @@ module Spree
         end
 
         it "does not set the default: true flag" do
-          order = build(:order)
+          order = build_stubbed(:order)
           user.persist_order_address(order)
         end
       end
@@ -286,14 +286,14 @@ module Spree
           end
 
           it "does not call save_in_address_book on ship address" do
-            order = build(:order)
+            order = build_stubbed(:order)
             order.ship_address = nil
 
             user.persist_order_address(order)
           end
 
           it "does not call save_in_address_book on bill address" do
-            order = build(:order)
+            order = build_stubbed(:order)
             order.bill_address = nil
 
             user.persist_order_address(order)
@@ -308,14 +308,14 @@ module Spree
         end
 
         it "does not call save_in_address_book on ship address" do
-          order = build(:order)
+          order = build_stubbed(:order)
           order.ship_address = nil
 
           user.persist_order_address(order)
         end
 
         it "does not call save_in_address_book on bill address" do
-        order = build(:order)
+        order = build_stubbed(:order)
         order.bill_address = nil
 
         user.persist_order_address(order)
@@ -325,7 +325,7 @@ module Spree
   end
 
   context "generating a new user with a ship_address at once" do
-    let(:ship_address) { build(:ship_address) }
+    let(:ship_address) { build_stubbed(:ship_address) }
     subject { create(:user, ship_address: ship_address) }
 
     it "stores the ship_address" do

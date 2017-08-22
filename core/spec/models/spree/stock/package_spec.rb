@@ -3,14 +3,14 @@ require 'spec_helper'
 module Spree
   module Stock
     describe Package, type: :model do
-      let(:variant) { build(:variant, weight: 25.0) }
+      let(:variant) { build_stubbed(:variant, weight: 25.0) }
       let(:stock_location) { build(:stock_location) }
-      let(:order) { build(:order) }
+      let(:order) { build_stubbed(:order) }
 
       subject { Package.new(stock_location) }
 
       def build_inventory_unit
-        build(:inventory_unit, variant: variant, order: order)
+        build_stubbed(:inventory_unit, variant: variant, order: order)
       end
 
       it 'calculates the weight of all the contents' do
@@ -57,10 +57,10 @@ module Spree
         variant1 = mock_model(Variant, shipping_category_id: category1.id)
         variant2 = mock_model(Variant, shipping_category_id: category2.id)
         variant3 = mock_model(Variant, shipping_category_id: nil)
-        contents = [ContentItem.new(build(:inventory_unit, variant: variant1)),
-                    ContentItem.new(build(:inventory_unit, variant: variant1)),
-                    ContentItem.new(build(:inventory_unit, variant: variant2)),
-                    ContentItem.new(build(:inventory_unit, variant: variant3))]
+        contents = [ContentItem.new(build_stubbed(:inventory_unit, variant: variant1)),
+                    ContentItem.new(build_stubbed(:inventory_unit, variant: variant1)),
+                    ContentItem.new(build_stubbed(:inventory_unit, variant: variant2)),
+                    ContentItem.new(build_stubbed(:inventory_unit, variant: variant3))]
 
         package = Package.new(stock_location, contents)
         expect(package.shipping_methods).to match_array([method1, method2])
@@ -76,10 +76,10 @@ module Spree
         variant1 = mock_model(Variant, shipping_category_id: category1.id)
         variant2 = mock_model(Variant, shipping_category_id: category2.id)
         variant3 = mock_model(Variant, shipping_category_id: nil)
-        contents = [ContentItem.new(build(:inventory_unit, variant: variant1)),
-                    ContentItem.new(build(:inventory_unit, variant: variant1)),
-                    ContentItem.new(build(:inventory_unit, variant: variant2)),
-                    ContentItem.new(build(:inventory_unit, variant: variant3))]
+        contents = [ContentItem.new(build_stubbed(:inventory_unit, variant: variant1)),
+                    ContentItem.new(build_stubbed(:inventory_unit, variant: variant1)),
+                    ContentItem.new(build_stubbed(:inventory_unit, variant: variant2)),
+                    ContentItem.new(build_stubbed(:inventory_unit, variant: variant3))]
 
         package = Package.new(stock_location, contents)
         expect(package.shipping_methods).to match_array([method1])
@@ -87,7 +87,7 @@ module Spree
 
       it 'builds an empty list of shipping methods when no categories' do
         variant  = mock_model(Variant, shipping_category_id: nil)
-        contents = [ContentItem.new(build(:inventory_unit, variant: variant))]
+        contents = [ContentItem.new(build_stubbed(:inventory_unit, variant: variant))]
         package  = Package.new(stock_location, contents)
         expect(package.shipping_methods).to be_empty
       end
@@ -96,7 +96,7 @@ module Spree
         2.times { subject.add build_inventory_unit }
         subject.add build_inventory_unit, :backordered
 
-        shipping_method = build(:shipping_method)
+        shipping_method = build_stubbed(:shipping_method)
 
         shipment = subject.to_shipment
         shipment.shipping_rates = [Spree::ShippingRate.new(shipping_method: shipping_method, cost: 10.00, selected: true)]

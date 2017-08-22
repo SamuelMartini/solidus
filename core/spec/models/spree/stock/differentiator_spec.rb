@@ -6,13 +6,13 @@ module Spree
       let(:variant1) { mock_model(Variant) }
       let(:variant2) { mock_model(Variant) }
 
-      let(:line_item1) { build(:line_item, variant: variant1, quantity: 2) }
-      let(:line_item2) { build(:line_item, variant: variant2, quantity: 2) }
+      let(:line_item1) { build_stubbed(:line_item, variant: variant1, quantity: 2) }
+      let(:line_item2) { build_stubbed(:line_item, variant: variant2, quantity: 2) }
 
       let(:stock_location) { mock_model(StockLocation) }
 
-      let(:inventory_unit1) { build(:inventory_unit, variant: variant1, line_item: line_item1) }
-      let(:inventory_unit2) { build(:inventory_unit, variant: variant2, line_item: line_item2) }
+      let(:inventory_unit1) { build_stubbed(:inventory_unit, variant: variant1, line_item: line_item1) }
+      let(:inventory_unit2) { build_stubbed(:inventory_unit, variant: variant2, line_item: line_item2) }
 
       let(:order) { mock_model(Order, line_items: [line_item1, line_item2]) }
 

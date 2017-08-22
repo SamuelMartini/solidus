@@ -18,7 +18,7 @@ describe Spree::Address, type: :model do
   context "validation" do
     let(:country) { mock_model(Spree::Country, states: [state], states_required: true) }
     let(:state) { stub_model(Spree::State, name: 'maryland', abbr: 'md') }
-    let(:address) { build(:address, country: country) }
+    let(:address) { build_stubbed(:address, country: country) }
 
     before do
       allow(country.states).to receive_messages with_name_or_abbr: [state]
@@ -331,7 +331,7 @@ describe Spree::Address, type: :model do
   end
 
   context '#country_iso=' do
-    let(:address) { build(:address, country_id: nil) }
+    let(:address) { build_stubbed(:address, country_id: nil) }
     let(:country) { create(:country, iso: 'ZW') }
 
     it 'sets the country to the country with the matching iso code' do

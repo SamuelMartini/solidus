@@ -4,8 +4,8 @@ module Spree
   describe Exchange, type: :model do
     let(:order) { Spree::Order.new }
 
-    let(:return_item_1) { build(:exchange_return_item) }
-    let(:return_item_2) { build(:exchange_return_item) }
+    let(:return_item_1) { build_stubbed(:exchange_return_item) }
+    let(:return_item_2) { build_stubbed(:exchange_return_item) }
     let(:return_items) { [return_item_1, return_item_2] }
     let(:exchange) { Exchange.new(order, return_items) }
 

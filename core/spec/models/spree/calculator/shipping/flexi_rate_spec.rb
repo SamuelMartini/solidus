@@ -4,8 +4,8 @@ require 'shared_examples/calculator_shared_examples'
 module Spree
   module Calculator::Shipping
     describe FlexiRate, type: :model do
-      let(:variant1) { build(:variant, price: 10) }
-      let(:variant2) { build(:variant, price: 20) }
+      let(:variant1) { build_stubbed(:variant, price: 10) }
+      let(:variant2) { build_stubbed(:variant, price: 20) }
 
       it_behaves_like 'a calculator with a description'
 

@@ -644,7 +644,7 @@ describe Spree::Variant, type: :model do
     it 'should not track inventory when variant is turned off' do
       Spree::Config[:track_inventory_levels] = true
 
-      expect(build(:on_demand_variant).should_track_inventory?).to eq(false)
+      expect(build_stubbed(:on_demand_variant).should_track_inventory?).to eq(false)
     end
 
     it 'should track inventory when global and variant are on' do

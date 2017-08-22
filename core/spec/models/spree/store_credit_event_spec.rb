@@ -37,7 +37,7 @@ describe Spree::StoreCreditEvent do
 
     context "adjustment event" do
       context "has an update reason" do
-        let(:event) { build(:store_credit_adjustment_event) }
+        let(:event) { build_stubbed(:store_credit_adjustment_event) }
 
         it "returns true" do
           expect(subject).to eq true
@@ -45,7 +45,7 @@ describe Spree::StoreCreditEvent do
       end
 
       context "doesn't have an update reason" do
-        let(:event) { build(:store_credit_adjustment_event, update_reason: nil) }
+        let(:event) { build_stubbed(:store_credit_adjustment_event, update_reason: nil) }
 
         it "returns false" do
           expect(subject).to eq false
@@ -60,7 +60,7 @@ describe Spree::StoreCreditEvent do
 
     context "invalidate event" do
       context "has an update reason" do
-        let(:event) { build(:store_credit_invalidate_event) }
+        let(:event) { build_stubbed(:store_credit_invalidate_event) }
 
         it "returns true" do
           expect(subject).to eq true
@@ -68,7 +68,7 @@ describe Spree::StoreCreditEvent do
       end
 
       context "doesn't have an update reason" do
-        let(:event) { build(:store_credit_invalidate_event, update_reason: nil) }
+        let(:event) { build_stubbed(:store_credit_invalidate_event, update_reason: nil) }
 
         it "returns false" do
           expect(subject).to eq false
@@ -82,7 +82,7 @@ describe Spree::StoreCreditEvent do
     end
 
     context "event doesn't require an update reason" do
-      let(:event) { build(:store_credit_auth_event) }
+      let(:event) { build_stubbed(:store_credit_auth_event) }
 
       it "returns true" do
         expect(subject).to eq true

@@ -4,8 +4,8 @@ module Spree
   module Stock
     describe Prioritizer, type: :model do
       let(:order) { mock_model(Order) }
-      let(:stock_location) { build(:stock_location) }
-      let(:variant) { build(:variant) }
+      let(:stock_location) { build_stubbed(:stock_location) }
+      let(:variant) { build_stubbed(:variant) }
 
       def inventory_units
         @inventory_units ||= []

@@ -47,7 +47,7 @@ describe Spree::Price, type: :model do
     end
 
     context '#country_iso' do
-      subject(:price) { build(:price, country_iso: country_iso) }
+      subject(:price) { build_stubbed(:price, country_iso: country_iso) }
 
       context 'when country iso is nil' do
         let(:country_iso) { nil }

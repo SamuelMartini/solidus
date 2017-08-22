@@ -713,7 +713,7 @@ describe Spree::Promotion, type: :model do
 
         context 'when the line item has an non-promotionable product' do
           let(:rules) { [true_rule] }
-          let(:line_item) { build(:line_item) { |li| li.product.promotionable = false } }
+          let(:line_item) { build_stubbed(:line_item) { |li| li.product.promotionable = false } }
           it { is_expected.not_to be }
         end
       end

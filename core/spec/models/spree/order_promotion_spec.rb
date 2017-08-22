@@ -13,7 +13,6 @@ describe Spree::OrderPromotion do
       order_promotion.errors[:promotion_code]
     end
 
-    let(:order_promotion) { build(:order_promotion) }
     let(:promotion) { order_promotion.promotion }
 
     context "when the promotion does not have a code" do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Spree::StoreCreditCategory, type: :model do
   describe "#non_expiring?" do
-    let(:store_credit_category) { build(:store_credit_category, name: category_name) }
+    let(:store_credit_category) { build_stubbed(:store_credit_category, name: category_name) }
 
     context "non-expiring type store credit" do
       let(:category_name) { "Non-expiring" }
