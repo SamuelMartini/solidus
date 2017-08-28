@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'spree/testing_support/factories/image_factory'
+require 'spree/testing_support/factories/image_factory' # whuat is this?
 
 RSpec.describe 'image factory' do
   let(:factory_class) { Spree::Image }
