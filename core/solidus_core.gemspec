@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'friendly_id', '~> 5.0'
   s.add_dependency 'kaminari', '>= 0.17', '< 2.0'
   s.add_dependency 'monetize', '~> 1.1'
-  s.add_dependency 'paperclip', ['>= 4.2', '< 6']
   s.add_dependency 'paranoia', '~> 2.3'
   s.add_dependency 'rails', '~> 5.1.0'
   s.add_dependency 'ransack', '~> 1.8'
