@@ -353,6 +353,16 @@ module Spree
     #   Spree::CurrentStoreSelector
     class_name_attribute :current_store_selector_class, default: 'Spree::StoreSelector::ByServerName'
 
+    # Allows providing your own class for file uploading
+    #
+    # SoldiusPaperclip is an opinionated extension
+    # Default backends use Paperclip's API directly, so it must stay the same
+    #
+    # @!attribute [rw] add_payment_sources_to_wallet_class
+    # @return [Class] a class with the same public interfaces
+    #   as Spree::Image::AddPaymentSourcesToWallet.
+    class_name_attribute :image_attachment_class, default: 'SolidusPaperclip::PaperclipAttachment'
+
     # Allows providing your own class instance for generating order numbers.
     #
     # @!attribute [rw] order_number_generator
