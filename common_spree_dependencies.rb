@@ -17,6 +17,7 @@ end
 
 gem 'coffee-rails'
 gem 'sass-rails'
+gem 'solidus_paperclip', :path => '/home/swcraig/projects/solidus_paperclip'
 
 group :test do
   gem 'capybara', '~> 2.7'
