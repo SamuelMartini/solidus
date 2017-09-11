@@ -11,7 +11,6 @@ describe Spree::PermissionSets::ProductDisplay do
     end
 
     it { is_expected.to be_able_to(:display, Spree::Product) }
-    it { is_expected.to be_able_to(:display, Spree::Image) }
     it { is_expected.to be_able_to(:display, Spree::Variant) }
     it { is_expected.to be_able_to(:display, Spree::OptionValue) }
     it { is_expected.to be_able_to(:display, Spree::ProductProperty) }
@@ -20,7 +19,6 @@ describe Spree::PermissionSets::ProductDisplay do
     it { is_expected.to be_able_to(:display, Spree::Taxonomy) }
     it { is_expected.to be_able_to(:display, Spree::Taxon) }
     it { is_expected.to be_able_to(:admin, Spree::Product) }
-    it { is_expected.to be_able_to(:admin, Spree::Image) }
     it { is_expected.to be_able_to(:admin, Spree::Variant) }
     it { is_expected.to be_able_to(:admin, Spree::OptionValue) }
     it { is_expected.to be_able_to(:admin, Spree::ProductProperty) }
@@ -33,7 +31,6 @@ describe Spree::PermissionSets::ProductDisplay do
 
   context "when not activated" do
     it { is_expected.not_to be_able_to(:display, Spree::Product) }
-    it { is_expected.not_to be_able_to(:display, Spree::Image) }
     it { is_expected.not_to be_able_to(:display, Spree::Variant) }
     it { is_expected.not_to be_able_to(:display, Spree::OptionValue) }
     it { is_expected.not_to be_able_to(:display, Spree::ProductProperty) }
@@ -42,7 +39,6 @@ describe Spree::PermissionSets::ProductDisplay do
     it { is_expected.not_to be_able_to(:display, Spree::Taxonomy) }
     it { is_expected.not_to be_able_to(:display, Spree::Taxon) }
     it { is_expected.not_to be_able_to(:admin, Spree::Product) }
-    it { is_expected.not_to be_able_to(:admin, Spree::Image) }
     it { is_expected.not_to be_able_to(:admin, Spree::Variant) }
     it { is_expected.not_to be_able_to(:admin, Spree::OptionValue) }
     it { is_expected.not_to be_able_to(:admin, Spree::ProductProperty) }
