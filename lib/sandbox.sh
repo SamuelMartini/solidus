@@ -37,7 +37,7 @@ fi
 cd ./sandbox
 echo "gem 'solidus', :path => '..'" >> Gemfile
 echo "gem 'solidus_auth_devise', :git =>
-'https://github.com/swcraig/solidus_auth_devise.git'" >> Gemfile
+'https://github.com/swcraig/solidus_auth_devise.git', :branch => 'fixme'" >> Gemfile
 
 cat <<RUBY >> Gemfile
 group :test, :development do
