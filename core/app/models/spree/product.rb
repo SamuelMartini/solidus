@@ -69,10 +69,10 @@ module Spree
 
     delegate :display_amount, :display_price, :has_default_price?, to: :find_or_build_master
 
-    delegate :images, to: :master, prefix: true
-    alias_method :images, :master_images
+    # delegate :images, to: :master, prefix: true
+    # alias_method :images, :master_images
 
-    has_many :variant_images, -> { order(:position) }, source: :images, through: :variants_including_master
+    # has_many :variant_images, -> { order(:position) }, source: :images, through: :variants_including_master
 
     after_create :build_variants_from_option_values_hash, if: :option_values_hash
 
