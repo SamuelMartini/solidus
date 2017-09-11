@@ -40,8 +40,6 @@ module Spree
     has_many :option_values_variants
     has_many :option_values, through: :option_values_variants
 
-    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: "Spree::Image"
-
     has_many :prices,
       class_name: 'Spree::Price',
       dependent: :destroy,
