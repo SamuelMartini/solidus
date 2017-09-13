@@ -1,14 +1,14 @@
 {
   "name": "Solidus Sandbox",
-  "description": "A demonstration store using Solidus with some test data.",
-  "repository": "https://github.com/solidusio/solidus",
+  "description": "A est data.",
+  "repository": "https://github.com/swcraig/solidus/tree/fixme",
   "logo": "http://solidus.io/favicon.ico",
   "keywords": [
     "solidus",
     "demo"
   ],
   "buildpacks": [
-    {"url": "https://github.com/solidusio/heroku-buildpack-solidus-demo.git"}
+    {"url": "https://github.com/swcraig/heroku-buildpack-solidus-demo.git"}
   ],
   "addons": [
     "heroku-postgresql:hobby-dev"
