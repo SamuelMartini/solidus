@@ -21,11 +21,7 @@
         <tr data-transfer-item-id="<%= item.id %>" class='<%= "deleted" if variant.deleted? %>'>
           <td class="no-padding">
             <div class='variant-container' data-variant-id="<%= variant.id %>">
-              <div class='variant-image'>
-                <%= render 'spree/admin/shared/image', image: variant.display_image(fallback: false), size: :small %>
-              </div>
               <div class='variant-details'>
-
                 <table class='stock-variant-field-table'>
                   <tbody>
                     <% if variant.deleted? %>
