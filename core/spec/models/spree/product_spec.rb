@@ -24,7 +24,6 @@ RSpec.describe Spree::Product, type: :model do
         expect(clone.name).to eq('COPY OF ' + product.name)
         expect(clone.master.sku).to eq('COPY OF ' + product.master.sku)
         expect(clone.taxons).to eq(product.taxons)
-        expect(clone.images.size).to eq(product.images.size)
       end
 
       it 'calls #duplicate_extra' do
@@ -426,26 +425,6 @@ RSpec.describe Spree::Product, type: :model do
       it "lists the promotion as a possible promotion" do
         expect(product.possible_promotions).to include(promotion)
       end
-    end
-  end
-
-  context "#images" do
-    let(:product) { create(:product) }
-    let(:image) { File.open(File.expand_path('../../../fixtures/thinking-cat.jpg', __FILE__)) }
-    let(:params) { { viewable_id: product.master.id, viewable_type: 'Spree::Variant', attachment: image, alt: "position 2", position: 2 } }
-
-    before do
-      Spree::Image.create(params)
-      Spree::Image.create(params.merge({ alt: "position 1", position: 1 }))
-      Spree::Image.create(params.merge({ viewable_type: 'ThirdParty::Extension', alt: "position 1", position: 2 }))
-    end
-
-    it "only looks for variant images" do
-      expect(product.images.size).to eq(2)
-    end
-
-    it "should be sorted by position" do
-      expect(product.images.pluck(:alt)).to eq(["position 1", "position 2"])
     end
   end
 
