@@ -11,7 +11,6 @@ RSpec.describe Spree::PermissionSets::ProductManagement do
     end
 
     it { is_expected.to be_able_to(:manage, Spree::Product) }
-    it { is_expected.to be_able_to(:manage, Spree::Image) }
     it { is_expected.to be_able_to(:manage, Spree::Variant) }
     it { is_expected.to be_able_to(:manage, Spree::OptionValue) }
     it { is_expected.to be_able_to(:manage, Spree::ProductProperty) }
@@ -24,7 +23,6 @@ RSpec.describe Spree::PermissionSets::ProductManagement do
 
   context "when not activated" do
     it { is_expected.not_to be_able_to(:manage, Spree::Product) }
-    it { is_expected.not_to be_able_to(:manage, Spree::Image) }
     it { is_expected.not_to be_able_to(:manage, Spree::Variant) }
     it { is_expected.not_to be_able_to(:manage, Spree::OptionValue) }
     it { is_expected.not_to be_able_to(:manage, Spree::ProductProperty) }
