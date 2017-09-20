@@ -1,8 +1,5 @@
 <% shipment.manifest.each do |item| %>
   <tr class="stock-item" data-item-quantity="<%= item.quantity %>">
-    <td class="item-image">
-      <%= render 'spree/admin/shared/image', image: item.variant.display_image, size: :mini %>
-    </td>
     <td class="item-name">
       <%= item.variant.product.name %><br><%= "(" + variant_options(item.variant) + ")" unless item.variant.option_values.empty? %>
       <% if item.variant.sku.present? %>
