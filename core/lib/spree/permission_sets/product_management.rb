@@ -3,7 +3,6 @@ module Spree
     class ProductManagement < PermissionSets::Base
       def activate!
         can :manage, Spree::Classification
-        can :manage, Spree::Image
         can :manage, Spree::OptionType
         can :manage, Spree::OptionValue
         can :manage, Spree::Price
