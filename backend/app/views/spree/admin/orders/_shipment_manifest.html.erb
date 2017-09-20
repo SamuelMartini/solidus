@@ -3,9 +3,6 @@
       data-item-quantity="<%= item.quantity %>"
       data-variant-id="<%= item.variant.id %>"
       >
-    <td class="item-image align-center">
-      <%= render 'spree/admin/shared/image', image: item.variant.display_image, size: :mini %>
-    </td>
     <td class="item-name">
       <%= item.variant.product.name %><br><%= "(" + variant_options(item.variant) + ")" unless item.variant.option_values.empty? %>
       <% if item.variant.sku.present? %>
