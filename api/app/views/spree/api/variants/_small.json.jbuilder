@@ -10,7 +10,9 @@ json.cache! [I18n.locale, variant] do
   json.option_values(variant.option_values) do |option_value|
     json.(option_value, *option_value_attributes)
   end
-  json.images(variant.images) do |image|
-    json.partial!("spree/api/images/image", image: image)
+  if Spree::Config.image_adapter
+    json.images(variant.images) do |image|
+      json.partial!(Spree::Config.image_adapter.jbuilder_image_path, image: image)
+    end
   end
 end
