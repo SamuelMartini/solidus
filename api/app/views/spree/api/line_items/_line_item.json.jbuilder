@@ -6,11 +6,13 @@ json.cache! [I18n.locale, line_item] do
   json.variant do
     json.partial!("spree/api/variants/small", variant: line_item.variant)
     json.(line_item.variant, :product_id)
-    json.images(line_item.variant.images) do |image|
-      json.partial!("spree/api/images/image", image: image)
-    end
   end
   json.adjustments(line_item.adjustments) do |adjustment|
     json.partial!("spree/api/adjustments/adjustment", adjustment: adjustment)
+  end
+  if Spree::Config.image_adapter
+    json.images(line_item.variant.images) do |image|
+      json.partial!(Spree::Config.image_adapter.jbuilder_image_path, image: image)
+    end
   end
 end
