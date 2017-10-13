@@ -362,6 +362,8 @@ module Spree
     #   Spree::CurrentStoreSelector
     class_name_attribute :current_store_selector_class, default: 'Spree::StoreSelector::ByServerName'
 
+    class_name_attribute :image_adapter, default: nil
+
     # Allows providing your own class instance for generating order numbers.
     #
     # @!attribute [rw] order_number_generator
