@@ -3,9 +3,11 @@
     <input type="hidden" name="variant_id" class="js-select-variant select-variant fullwidth">
   </td>
 {{else}}
-  <td class="line-item-image">
-    {{> _image image=line_item.variant.images.[0] size="mini" }}
-  </td>
+  {{#if line_item.variant.images}}
+    <td class="line-item-image">
+      {{> _image image=line_item.variant.images.[0] size="mini" }}
+    </td>
+  {{/if}}
   <td class="line-item-name">
     {{ line_item.variant.name }}<br>
     {{#if line_item.variant.options_text }}

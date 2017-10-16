@@ -1,6 +1,8 @@
 <table class="line-items index" data-hook="line-items">
   <colgroup>
-    <col style="width: 10%;" />
+    <% if Spree::Config.image_adapter %>
+      <col style="width: 10%;" />
+    <% end %>
     <col style="width: 45%;" />
     <col style="width: 10%;" />
     <col style="width: 10%;" />
@@ -10,7 +12,8 @@
 
   <thead>
     <tr>
-      <th colspan="2"><%= Spree::Product.human_attribute_name(:name) %></th>
+      <% colspan = Spree::Config.image_adapter ? "2" : "1" %>
+      <th colspan=<%= colspan %><%= Spree::Product.human_attribute_name(:name) %></th>
       <th><%= Spree::LineItem.human_attribute_name(:price) %></th>
       <th><%= Spree::LineItem.human_attribute_name(:quantity) %></th>
       <th><%= Spree::LineItem.human_attribute_name(:total) %></th>
