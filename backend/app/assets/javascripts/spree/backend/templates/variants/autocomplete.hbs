@@ -1,7 +1,9 @@
 <div class="variant-autocomplete-item media">
-  <div class="media-left">
-    {{> _image image=variant.images.[0] size="mini" }}
-  </div>
+  {{#if variant.images}}
+    <div class="media-left">
+      {{> _image image=variant.images.[0] size="mini" }}
+    </div>
+  {{/if}}
 
   <div class="media-body">
     <h6 class="media-heading">{{variant.name}}</h6>
