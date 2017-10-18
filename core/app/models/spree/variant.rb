@@ -350,6 +350,10 @@ module Spree
       end.flatten.compact
     end
 
+    def images
+      Variant.reflect_on_association(:images) ? association(:images).reader : []
+    end
+
     private
 
     def rebuild_vat_prices?
