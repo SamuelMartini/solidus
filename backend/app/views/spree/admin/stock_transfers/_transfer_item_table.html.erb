@@ -22,7 +22,7 @@
           <td class="no-padding">
             <div class='variant-container' data-variant-id="<%= variant.id %>">
               <div class='variant-image'>
-                <%= render 'spree/admin/shared/image', image: variant.display_image(fallback: false), size: :small %>
+                <%= render 'spree/admin/shared/image', image: variant.gallery.first, size: :small %>
               </div>
               <div class='variant-details'>
 
