@@ -522,4 +522,13 @@ RSpec.describe Spree::Product, type: :model do
       end
     end
   end
+
+  describe '#gallery' do
+    let(:product) { Spree::Product.new }
+    subject { product.gallery }
+
+    it 'responds to #images' do
+      expect(subject).to respond_to(:images)
+    end
+  end
 end
