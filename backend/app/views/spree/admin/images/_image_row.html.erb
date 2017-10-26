@@ -1,4 +1,4 @@
-<tr id="<%= spree_dom_id image %>" data-hook="images_row">
+<tr id="image_<%= image.id %>" data-hook="images_row">
 
   <td>
     <% if can?(:update_positions, Spree::Image) %>
@@ -16,7 +16,7 @@
       title: image.alt,
       content: %{
         <div class='align-center'>
-          #{image_tag(image.attachment.url(:large))}
+          #{image_tag(image.url(:large))}
         </div>
       }.html_safe
     ) %>
