@@ -201,6 +201,7 @@ module Spree
     end
 
     def round_money(n)
+      Spree::Deprecation.warn('Spree::OrderUpdater#round_money is DEPRECATED.')
       (n * 100).round / 100.0
     end
 
