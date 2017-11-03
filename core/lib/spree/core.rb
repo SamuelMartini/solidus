@@ -66,6 +66,7 @@ require 'spree/i18n'
 require 'spree/localized_number'
 require 'spree/money'
 require 'spree/permitted_attributes'
+require 'spree/permitted_messages'
 
 require 'spree/core/importer'
 require 'spree/core/permalinks'
