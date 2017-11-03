@@ -138,7 +138,7 @@ module Spree
       end
 
       def resend
-        OrderMailer.confirm_email(@order, true).deliver_later
+        Spree::Dispatcher.send_message(:order_confirm, @order, true)
         flash[:success] = t('spree.order_email_resent')
 
         redirect_to(spree.edit_admin_order_path(@order))
