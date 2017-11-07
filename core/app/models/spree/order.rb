@@ -28,6 +28,8 @@ module Spree
     include Spree::Order::Checkout
     include Spree::Order::Payments
 
+    include Observable
+
     class InsufficientStock < StandardError; end
     class CannotRebuildShipments < StandardError; end
 
