@@ -87,6 +87,7 @@ class Spree::OrderCancellations
     Spree::OrderMutex.with_lock!(@order) do
       return_items = inventory_units.map(&:current_or_new_return_item)
       reimbursement = Spree::Reimbursement.new(order: @order, return_items: return_items)
+      reimbursement.add_observer(Spree::Config.email_observer_class)
       reimbursement.return_all
     end
 
