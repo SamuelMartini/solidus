@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Spree::OrderCancellations do
+  let(:order_cancellation) { Spree::OrderCancellations.new(order) }
+
   describe "#cancel_unit" do
-    subject { Spree::OrderCancellations.new(order).cancel_unit(inventory_unit) }
+    subject { order_cancellation.cancel_unit(inventory_unit) }
+
     let(:order) { create(:shipped_order, line_items_count: 1) }
     let(:inventory_unit) { order.inventory_units.first }
 
@@ -45,7 +48,8 @@ RSpec.describe Spree::OrderCancellations do
   end
 
   describe "#reimburse_units" do
-    subject { Spree::OrderCancellations.new(order).reimburse_units(inventory_units) }
+    subject { order_cancellation.reimburse_units(inventory_units) }
+
     let(:order) { create(:shipped_order, line_items_count: 2) }
     let(:inventory_units) { order.inventory_units }
     let!(:default_refund_reason) { Spree::RefundReason.find_or_create_by!(name: Spree::RefundReason::RETURN_PROCESSING_REASON, mutable: false) }
@@ -65,14 +69,14 @@ RSpec.describe Spree::OrderCancellations do
   end
 
   describe "#short_ship" do
-    subject { Spree::OrderCancellations.new(order).short_ship([inventory_unit]) }
+    subject { order_cancellation }
 
     let(:order) { create(:order_ready_to_ship, line_items_count: 1) }
     let(:inventory_unit) { order.inventory_units.first }
     let(:shipment) { inventory_unit.shipment }
 
     it "creates a UnitCancel record" do
-      expect { subject }.to change { Spree::UnitCancel.count }.by(1)
+      expect { subject.short_ship([inventory_unit])  }.to change { Spree::UnitCancel.count }.by(1)
 
       unit_cancel = Spree::UnitCancel.last
       expect(unit_cancel.inventory_unit).to eq inventory_unit
@@ -80,42 +84,24 @@ RSpec.describe Spree::OrderCancellations do
     end
 
     it "cancels the inventory unit" do
-      expect { subject }.to change { inventory_unit.state }.to "canceled"
+      expect { subject.short_ship([inventory_unit]) }.to change { inventory_unit.state }.to "canceled"
     end
 
     it "updates the shipment.state" do
-      expect { subject }.to change { shipment.reload.state }.from('ready').to('shipped')
+      expect { subject.short_ship([inventory_unit])  }.to change { shipment.reload.state }.from('ready').to('shipped')
     end
 
     it "updates the order.shipment_state" do
-      expect { subject }.to change { order.shipment_state }.from('ready').to('shipped')
+      expect { subject.short_ship([inventory_unit])  }.to change { order.shipment_state }.from('ready').to('shipped')
     end
 
     it "adjusts the order" do
-      expect { subject }.to change { order.total }.by(-10.0)
+      expect { subject.short_ship([inventory_unit])  }.to change { order.total }.by(-10.0)
     end
 
-    it "sends a cancellation email" do
-      mail_double = double
-      expect(Spree::OrderMailer).to receive(:inventory_cancellation_email).with(order, [inventory_unit]).and_return(mail_double)
-      expect(mail_double).to receive(:deliver_later)
-      subject
-    end
-
-    context "when send_cancellation_mailer is false" do
-      subject { Spree::OrderCancellations.new(order).short_ship([inventory_unit]) }
-
-      before do
-        @original_send_boolean = Spree::OrderCancellations.send_cancellation_mailer
-        Spree::OrderCancellations.send_cancellation_mailer = false
-      end
-
-      after { Spree::OrderCancellations.send_cancellation_mailer = @original_send_boolean }
-
-      it "does not send a cancellation email" do
-        expect(Spree::OrderMailer).not_to receive(:inventory_cancellation_email)
-        subject
-      end
+    it 'sends update_change to the order' do
+      expect(order).to receive(:update_change)
+      subject.short_ship([inventory_unit])
     end
 
     context "with a who" do
