@@ -96,6 +96,14 @@ RSpec.describe Spree::Reimbursement, type: :model do
       expect(Spree::Refund.last.amount).to eq order.total
     end
 
+    it 'notifies all observers' do
+      called = false
+      mock_observer = ->(*args) { called = true }
+      reimbursement.add_observer(mock_observer, :call)
+      subject
+      expect(called).to eq(true)
+    end
+
     context 'with additional tax' do
       let!(:tax_rate) { create(:tax_rate, name: "Sales Tax", amount: 0.10, included_in_price: false, zone: tax_zone) }
 
@@ -141,11 +149,6 @@ RSpec.describe Spree::Reimbursement, type: :model do
         expect { subject }.to change { order.reload.shipments.count }.by 1
         expect(order.shipments.last.inventory_units.first.variant).to eq exchange_variant
       end
-    end
-
-    it "triggers the reimbursement mailer to be sent" do
-      expect(Spree::ReimbursementMailer).to receive(:reimbursement_email).with(reimbursement.id) { double(deliver_later: true) }
-      subject
     end
   end
 
