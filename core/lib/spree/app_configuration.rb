@@ -304,6 +304,9 @@ module Spree
     #   signature as Spree::CartonMailer.shipped_email.
     class_name_attribute :carton_shipped_email_class, default: 'Spree::CartonMailer'
 
+    class_name_attribute :order_mailer_class, default: 'Spree::OrderMailer'
+
+    class_name_attribute :reimbursement_mailer_class, default: 'Spree::ReimbursementMailer'
     # Allows providing your own class for merging two orders.
     #
     # @!attribute [rw] order_merger_class
