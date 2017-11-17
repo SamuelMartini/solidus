@@ -307,6 +307,9 @@ module Spree
     class_name_attribute :order_mailer_class, default: 'Spree::OrderMailer'
 
     class_name_attribute :reimbursement_mailer_class, default: 'Spree::ReimbursementMailer'
+
+    class_name_attribute :email_observer_class, default: 'Spree::EmailObserver'
+
     # Allows providing your own class for merging two orders.
     #
     # @!attribute [rw] order_merger_class
