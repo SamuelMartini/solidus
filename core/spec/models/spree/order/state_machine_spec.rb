@@ -81,13 +81,12 @@ RSpec.describe Spree::Order, type: :model do
       expect(order).to be_allow_cancel
     end
 
-    it "should send a cancel email" do
-      perform_enqueued_jobs do
-        order.cancel!
-      end
-
-      mail = ActionMailer::Base.deliveries.last
-      expect(mail.subject).to include "Cancellation"
+    it "should notify any observers" do
+      called = false
+      mock_observer = ->(*args) { called = true }
+      order.add_observer(mock_observer, :call)
+      order.cancel!
+      expect(called).to eq(true)
     end
 
     context "resets payment state" do

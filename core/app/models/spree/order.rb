@@ -755,6 +755,11 @@ module Spree
       end
     end
 
+    def update_change(change, *args)
+      changed(true)
+      notify_observers(change, *args)
+    end
+
     private
 
     def process_payments_before_complete

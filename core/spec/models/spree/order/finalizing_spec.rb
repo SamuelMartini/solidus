@@ -47,23 +47,12 @@ RSpec.describe Spree::Order, type: :model do
       order.finalize!
     end
 
-    it "should send an order confirmation email" do
-      mail_message = double "Mail::Message"
-      expect(Spree::OrderMailer).to receive(:confirm_email).with(order).and_return mail_message
-      expect(mail_message).to receive :deliver_later
+    it "should notify all observers" do
+      called = false
+      mock_observer = ->(*args) { called = true }
+      order.add_observer(mock_observer, :call)
       order.finalize!
-    end
-
-    it "sets confirmation delivered when finalizing" do
-      expect(order.confirmation_delivered?).to be false
-      order.finalize!
-      expect(order.confirmation_delivered?).to be true
-    end
-
-    it "should not send duplicate confirmation emails" do
-      allow(order).to receive_messages(confirmation_delivered?: true)
-      expect(Spree::OrderMailer).not_to receive(:confirm_email)
-      order.finalize!
+      expect(called).to eq(true)
     end
 
     it "should freeze all adjustments" do
