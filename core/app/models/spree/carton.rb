@@ -59,7 +59,7 @@ class Spree::Carton < Spree::Base
   end
 
   def shipped(suppress_mailer = false)
-    changed(stock_location.fulfillable? && !suppress_mailer)
-    notify_observers(:shipped, self)
+    changed(stock_location.fulfillable?)
+    notify_observers(:shipped, self, suppress_mailer)
   end
 end
