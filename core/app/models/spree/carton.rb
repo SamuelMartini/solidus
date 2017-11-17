@@ -1,4 +1,7 @@
 class Spree::Carton < Spree::Base
+
+  include Observable
+
   belongs_to :address, class_name: 'Spree::Address'
   belongs_to :stock_location, class_name: 'Spree::StockLocation', inverse_of: :cartons
   belongs_to :shipping_method, class_name: 'Spree::ShippingMethod', inverse_of: :cartons
@@ -53,5 +56,10 @@ class Spree::Carton < Spree::Base
 
   def any_exchanges?
     inventory_units.any?(&:original_return_item)
+  end
+
+  def shipped(suppress_mailer: false)
+    changed(stock_location.fulfillable? && !suppress_mailer)
+    notify_observers(:shipped, self)
   end
 end

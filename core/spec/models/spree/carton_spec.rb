@@ -53,6 +53,18 @@ RSpec.describe Spree::Carton do
     end
   end
 
+  describe "#shipped" do
+    subject { carton.shipped(suppress_mailer: false) }
+
+    it "notifies any observers" do
+      called = false
+      mock_observer = ->(*args) { called = true }
+      carton.add_observer(mock_observer, :call)
+      subject
+      expect(called).to eq(true)
+    end
+  end
+
   describe "#shipment_numbers" do
     subject { carton.shipment_numbers }
     let(:shipment) { carton.shipments.first }

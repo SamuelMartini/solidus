@@ -3,10 +3,6 @@ require 'rails_helper'
 RSpec.describe Spree::OrderShipping do
   let(:order) { create(:order_ready_to_ship, line_items_count: 1) }
 
-  def emails
-    ActionMailer::Base.deliveries
-  end
-
   shared_examples 'shipment shipping' do
     it "marks the inventory units as shipped" do
       expect { subject }.to change { order.inventory_units.reload.map(&:state) }.from(['on_hand']).to(['shipped'])
@@ -15,17 +11,6 @@ RSpec.describe Spree::OrderShipping do
     it "creates a carton with the shipment's inventory units" do
       expect { subject }.to change { order.cartons.count }.by(1)
       expect(subject.inventory_units).to match_array(shipment.inventory_units)
-    end
-
-    describe "shipment email" do
-      it "should send a shipment email" do
-        expect {
-          perform_enqueued_jobs {
-            subject
-          }
-        }.to change { emails.size }.by(1)
-        expect(emails.last.subject).to eq("#{order.store.name} Shipment Notification ##{order.number}")
-      end
     end
 
     it "updates the order shipment state" do
@@ -65,6 +50,11 @@ RSpec.describe Spree::OrderShipping do
     let(:shipping_method) { shipment.shipping_method }
 
     it_behaves_like 'shipment shipping'
+
+    it 'notifies carton observers' do
+      expect_any_instance_of(Spree::Carton).to receive(:shipped)
+      subject
+    end
 
     context "with an external_number" do
       subject do
@@ -109,8 +99,8 @@ RSpec.describe Spree::OrderShipping do
         )
       end
 
-      it "does not send a shipment email" do
-        expect { subject }.to_not change { emails.size }
+      it "does not send notification to carton observers" do
+        expect_any_instance_of(Spree::Carton).not_to receive(:shipped)
       end
     end
   end
@@ -217,8 +207,8 @@ RSpec.describe Spree::OrderShipping do
         )
       end
 
-      it "does not send a shipment email" do
-        expect { subject }.to_not change { emails.size }
+      it "does not send notify carton's observers" do
+        expect_any_instance_of(Spree::Carton).not_to receive(:shipped)
       end
     end
 
