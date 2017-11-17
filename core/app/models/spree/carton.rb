@@ -58,7 +58,7 @@ class Spree::Carton < Spree::Base
     inventory_units.any?(&:original_return_item)
   end
 
-  def shipped(suppress_mailer: false)
+  def shipped(suppress_mailer = false)
     changed(stock_location.fulfillable? && !suppress_mailer)
     notify_observers(:shipped, self)
   end

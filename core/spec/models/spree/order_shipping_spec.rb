@@ -52,8 +52,12 @@ RSpec.describe Spree::OrderShipping do
     it_behaves_like 'shipment shipping'
 
     it 'notifies carton observers' do
-      expect_any_instance_of(Spree::Carton).to receive(:shipped)
+      called = false
+      mock_observer = ->(*args) { called = true }
+      allow_any_instance_of(Spree::Carton).to receive(:add_observer).and_call_original
+      allow_any_instance_of(Spree::Carton).to receive(:add_observer).with(mock_observer, :call)
       subject
+      expect(called).to eq(true)
     end
 
     context "with an external_number" do
@@ -100,7 +104,12 @@ RSpec.describe Spree::OrderShipping do
       end
 
       it "does not send notification to carton observers" do
-        expect_any_instance_of(Spree::Carton).not_to receive(:shipped)
+        called = false
+        mock_observer = ->(*args) { called = true }
+        allow_any_instance_of(Spree::Carton).to receive(:add_observer).and_call_original
+        allow_any_instance_of(Spree::Carton).to receive(:add_observer).with(mock_observer, :call)
+        subject
+        expect(called).to eq(false)
       end
     end
   end
@@ -208,7 +217,12 @@ RSpec.describe Spree::OrderShipping do
       end
 
       it "does not send notify carton's observers" do
-        expect_any_instance_of(Spree::Carton).not_to receive(:shipped)
+        called = false
+        mock_observer = ->(*args) { called = true }
+        allow_any_instance_of(Spree::Carton).to receive(:add_observer).and_call_original
+        allow_any_instance_of(Spree::Carton).to receive(:add_observer).with(mock_observer, :call)
+        subject
+        expect(called).to eq(true)
       end
     end
 
