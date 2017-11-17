@@ -74,11 +74,9 @@ class Spree::OrderShipping
       shipment.update_columns(state: 'shipped', shipped_at: Time.current)
     end
 
-
-
     # Wherever sets suppress_mailer should be deciding whether an observer is
     # added to the order or not?
-    carton.shipped(suppress_mailer: suppress_mailer)
+    carton.shipped(suppress_mailer)
 
     @order.recalculate
 
