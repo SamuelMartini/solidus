@@ -71,17 +71,9 @@ class Spree::OrderShipping
       shipment.update_columns(state: 'shipped', shipped_at: Time.current)
     end
 
-    send_shipment_emails(carton) if stock_location.fulfillable? && !suppress_mailer # e.g. digital gift cards that aren't actually shipped
+    @order.notify_observers(:shipped, carton)
     @order.recalculate
 
     carton
-  end
-
-  private
-
-  def send_shipment_emails(carton)
-    carton.orders.each do |order|
-      Spree::Config.carton_shipped_email_class.shipped_email(order: order, carton: carton).deliver_later
-    end
   end
 end
