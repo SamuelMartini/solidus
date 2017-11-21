@@ -390,7 +390,7 @@ module Spree
     private
 
     def after_ship
-      order.shipping.ship_shipment(self, suppress_mailer: suppress_mailer)
+      order.shipping.ship_shipment(self)
     end
 
     def can_get_rates?

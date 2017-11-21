@@ -87,23 +87,6 @@ RSpec.describe Spree::OrderShipping do
         expect(subject.tracking).to eq 'tracking-number'
       end
     end
-
-    context "when told to suppress the mailer" do
-      subject do
-        order.shipping.ship(
-          inventory_units: inventory_units,
-          stock_location: stock_location,
-          address: address,
-          shipping_method: shipping_method,
-          suppress_mailer: true
-        )
-      end
-
-      it "does not add any observers to the order" do
-        subject
-        expect(order.count_observers).to eq(0)
-      end
-    end
   end
 
   describe "#ship_shipment" do
@@ -197,20 +180,6 @@ RSpec.describe Spree::OrderShipping do
       it "creates a carton with the shipment's inventory units" do
         expect { subject }.to change { order.cartons.count }.by(1)
         expect(subject.inventory_units).to match_array(unshipped_inventory)
-      end
-    end
-
-    context "when told to suppress the mailer" do
-      subject do
-        order.shipping.ship_shipment(
-          shipment,
-          suppress_mailer: true
-        )
-      end
-
-      it "does not add any observers to the order" do
-        subject
-        expect(order.count_observers).to eq(0)
       end
     end
 

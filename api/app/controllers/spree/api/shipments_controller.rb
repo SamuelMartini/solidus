@@ -54,7 +54,6 @@ module Spree
       def ship
         authorize! :ship, @shipment
         unless @shipment.shipped?
-          @shipment.suppress_mailer = (params[:send_mailer] == 'false')
           @shipment.order.add_observer(Spree::Config.email_observer_class) unless (params[:send_mailer] == 'false')
           @shipment.ship!
         end

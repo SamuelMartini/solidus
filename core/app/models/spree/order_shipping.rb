@@ -28,8 +28,7 @@ class Spree::OrderShipping
       external_number: external_number,
       # TODO: Remove the `|| shipment.tracking` once Shipment#ship! is called by
       # OrderShipping#ship rather than vice versa
-      tracking_number: tracking_number || shipment.tracking,
-      suppress_mailer: suppress_mailer
+      tracking_number: tracking_number || shipment.tracking
     )
   end
 
