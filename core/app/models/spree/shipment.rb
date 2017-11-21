@@ -20,6 +20,8 @@ module Spree
     # from outside of the state machine and can actually pass variables through.
     attr_accessor :special_instructions, :suppress_mailer
 
+    deprecate :suppress_mailer, :suppress_mailer=, deprecator: Spree::Deprecation
+
     accepts_nested_attributes_for :inventory_units
 
     make_permalink field: :number, length: 11, prefix: 'H'

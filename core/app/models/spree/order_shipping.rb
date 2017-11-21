@@ -13,7 +13,12 @@ class Spree::OrderShipping
   # @param external_number An optional external number. e.g. from a shipping company or 3PL.
   # @param tracking_number An optional tracking number.
   # @return The carton created.
-  def ship_shipment(shipment, external_number: nil, tracking_number: nil, suppress_mailer: false)
+  def ship_shipment(shipment, external_number: nil, tracking_number: nil, suppress_mailer: nil)
+
+    unless suppress_mailer.nil?
+      Spree::Deprecation.warn("The suppress_mailer argument for Spree::OrderShipping#ship_shipment is DEPRECATED. Add observers to the shipment's order instead.")
+    end
+
     ship(
       inventory_units: shipment.inventory_units.shippable,
       stock_location: shipment.stock_location,
@@ -41,7 +46,11 @@ class Spree::OrderShipping
   # @param tracking_number An option tracking number.
   # @return The carton created.
   def ship(inventory_units:, stock_location:, address:, shipping_method:,
-           shipped_at: Time.current, external_number: nil, tracking_number: nil, suppress_mailer: false)
+           shipped_at: Time.current, external_number: nil, tracking_number: nil, suppress_mailer: nil)
+
+    unless suppress_mailer.nil?
+      Spree::Deprecation.warn("The suppress_mailer argument for Spree::OrderShipping#ship is DEPRECATED. Add observers to the shipment's order instead.")
+    end
 
     carton = nil
 
