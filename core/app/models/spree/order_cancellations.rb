@@ -11,6 +11,8 @@ class Spree::OrderCancellations
   class_attribute :send_cancellation_mailer
   self.send_cancellation_mailer = true
 
+  deprecate :send_cancellation_mailer, deprecator: Spree::Deprecation
+
   def initialize(order)
     @order = order
   end
