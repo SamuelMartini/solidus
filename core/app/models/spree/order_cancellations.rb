@@ -40,7 +40,7 @@ class Spree::OrderCancellations
         end
 
         update_shipped_shipments(inventory_units)
-        @order.notify_observers(:inventory_cancel, inventory_units.to_a) if send_cancellation_mailer
+        @order.notify_observers(:inventory_cancel, inventory_units.to_a)
       end
 
       @order.recalculate

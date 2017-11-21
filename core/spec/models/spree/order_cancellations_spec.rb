@@ -100,22 +100,6 @@ RSpec.describe Spree::OrderCancellations do
       subject
     end
 
-    context "when send_cancellation_mailer is false" do
-      subject { Spree::OrderCancellations.new(order).short_ship([inventory_unit]) }
-
-      before do
-        @original_send_boolean = Spree::OrderCancellations.send_cancellation_mailer
-        Spree::OrderCancellations.send_cancellation_mailer = false
-      end
-
-      after { Spree::OrderCancellations.send_cancellation_mailer = @original_send_boolean }
-
-      it "not notify observers on order" do
-        expect_any_instance_of(Spree::Order).not_to receive(:notify_observers)
-        subject
-      end
-    end
-
     context "with a who" do
       subject { order.cancellations.short_ship([inventory_unit], whodunnit: 'some automated system') }
 
