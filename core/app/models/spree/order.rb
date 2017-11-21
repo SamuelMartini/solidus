@@ -25,6 +25,8 @@ module Spree
     ORDER_NUMBER_LETTERS = false
     ORDER_NUMBER_PREFIX  = 'R'
 
+    include Spree::Observable
+
     include Spree::Order::Checkout
     include Spree::Order::Payments
 
@@ -423,18 +425,13 @@ module Spree
 
       touch :completed_at
 
-      deliver_order_confirmation_email unless confirmation_delivered?
+      notify_observers(:confirm, self)
     end
 
     def fulfill!
       shipments.each { |shipment| shipment.update_state if shipment.persisted? }
       updater.update_shipment_state
       save!
-    end
-
-    def deliver_order_confirmation_email
-      Spree::OrderMailer.confirm_email(self).deliver_later
-      update_column(:confirmation_delivered, true)
     end
 
     # Helper methods for checkout steps
@@ -853,12 +850,8 @@ module Spree
       payments.completed.each { |payment| payment.cancel! unless payment.fully_refunded? }
       payments.store_credits.pending.each(&:void_transaction!)
 
-      send_cancel_email
+      notify_observers(:cancel, self)
       recalculate
-    end
-
-    def send_cancel_email
-      Spree::OrderMailer.cancel_email(self).deliver_later
     end
 
     def after_resume
