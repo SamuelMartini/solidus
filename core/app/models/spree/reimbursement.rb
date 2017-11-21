@@ -106,7 +106,7 @@ module Spree
       if unpaid_amount_within_tolerance?
         reimbursed!
         reimbursement_success_hooks.each { |h| h.call self }
-        send_reimbursement_email
+        order.notify_observers(:reimbursement_process, id)
       else
         errored!
         reimbursement_failure_hooks.each { |h| h.call self }
@@ -157,10 +157,6 @@ module Spree
       if return_items.any? { |ri| ri.inventory_unit.order_id != order_id }
         errors.add(:base, :return_items_order_id_does_not_match)
       end
-    end
-
-    def send_reimbursement_email
-      Spree::ReimbursementMailer.reimbursement_email(id).deliver_later
     end
 
     # If there are multiple different reimbursement types for a single
