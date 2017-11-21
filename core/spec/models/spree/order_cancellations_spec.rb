@@ -95,10 +95,8 @@ RSpec.describe Spree::OrderCancellations do
       expect { subject }.to change { order.total }.by(-10.0)
     end
 
-    it "sends a cancellation email" do
-      mail_double = double
-      expect(Spree::OrderMailer).to receive(:inventory_cancellation_email).with(order, [inventory_unit]).and_return(mail_double)
-      expect(mail_double).to receive(:deliver_later)
+    it "notifies any observers on the order" do
+      expect_any_instance_of(Spree::Order).to receive(:notify_observers)
       subject
     end
 
@@ -112,8 +110,8 @@ RSpec.describe Spree::OrderCancellations do
 
       after { Spree::OrderCancellations.send_cancellation_mailer = @original_send_boolean }
 
-      it "does not send a cancellation email" do
-        expect(Spree::OrderMailer).not_to receive(:inventory_cancellation_email)
+      it "not notify observers on order" do
+        expect_any_instance_of(Spree::Order).not_to receive(:notify_observers)
         subject
       end
     end
