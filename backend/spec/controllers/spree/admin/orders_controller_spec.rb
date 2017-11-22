@@ -55,12 +55,12 @@ describe Spree::Admin::OrdersController, type: :controller do
 
     context "#resend" do
       let(:order) { create(:completed_order_with_totals) }
-      it "resends order email" do
-        mail_message = double "Mail::Message"
-        expect(Spree::OrderMailer).to receive(:confirm_email).with(order, true).and_return mail_message
-        expect(mail_message).to receive :deliver_later
+      it "notifies the observers of an order" do
+        called = false
+        mock_observer = ->(*args) { called = true }
+        order.add_observer(mock_observer, :call)
         post :resend, params: { id: order.number }
-        expect(flash[:success]).to eq I18n.t('spree.order_email_resent')
+        expect(called).to eq(true)
       end
     end
 
