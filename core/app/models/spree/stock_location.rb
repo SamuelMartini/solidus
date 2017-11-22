@@ -12,8 +12,8 @@ module Spree
     has_many :user_stock_locations, dependent: :delete_all
     has_many :users, through: :user_stock_locations
 
-    belongs_to :state, class_name: 'Spree::State'
-    belongs_to :country, class_name: 'Spree::Country'
+    attr_accessor :state
+    attr_accessor :country
 
     has_many :shipping_method_stock_locations, dependent: :destroy
     has_many :shipping_methods, through: :shipping_method_stock_locations
