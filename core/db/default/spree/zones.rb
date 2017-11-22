@@ -3,9 +3,9 @@ north_america = Spree::Zone.find_or_create_by!(name: "North America", descriptio
 
 %w(PL FI PT RO DE FR SK HU SI IE AT ES IT BE SE LV BG GB LT CY LU MT DK NL EE HR CZ GR).
 each do |symbol|
-  eu_vat.zone_members.create!(zoneable: Spree::Country.find_by!(iso: symbol))
+  eu_vat.zone_members.create!(zoneable: Carmen::Country.coded(symbol))
 end
 
 %w(US CA).each do |symbol|
-  north_america.zone_members.create!(zoneable: Spree::Country.find_by!(iso: symbol))
+  north_america.zone_members.create!(zoneable: Carmen::Country.coded(symbol))
 end
