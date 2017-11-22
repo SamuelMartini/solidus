@@ -17,8 +17,11 @@ module Spree
       end
 
       def load_data
-        @countries = Spree::Country.order(:name)
-        @states = Spree::State.order(:name)
+        require 'carmen'
+        @countries = Carmen::Country.all.sort_by(&:name)
+        @states = Carmen::Country.all.inject([]) do |all_states, country|
+          all_states += country.subregions
+        end.sort_by(&:name)
         @zones = Spree::Zone.order(:name)
       end
     end
