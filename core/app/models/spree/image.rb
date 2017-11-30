@@ -19,6 +19,7 @@ module Spree
 
     # used by admin products autocomplete
     def mini_url
+      Spree::Deprecation.warn('Spree::Image#mini_url is DEPRECATED.')
       attachment.url(:mini, false)
     end
 
