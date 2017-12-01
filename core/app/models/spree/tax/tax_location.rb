@@ -7,6 +7,10 @@ module Spree
     # @attr_reader [Integer] state_id the ID of a Spree::State object
     class TaxLocation
       attr_reader :country_id, :state_id
+      attr_reader :country, :state
+
+      deprecate :country_id, 'Use #country instead', deprcator: Spree::Deprecation
+      deprecate :state_id, 'Use #state instead', deprcator: Spree::Deprecation
 
       # Create a new TaxLocation object
       #
@@ -18,6 +22,8 @@ module Spree
       # @return [Spree::Tax::TaxLocation] a Spree::Tax::TaxLocation object
       def initialize(country: nil, state: nil)
         # A carmen country is passed in
+        @country = country
+        @state = state
         @country_id = country && country.alpha_2_code
         @state_id = state && state.code
       end
@@ -26,12 +32,8 @@ module Spree
         state_id == other.state_id && country_id == other.country_id
       end
 
-      def country
-        Carmen::Country.coded(country_id)
-      end
-
       def empty?
-        country_id.nil? && state_id.nil?
+        country_id.nil? && state_id.nil? && country.nil? && state.nil?
       end
     end
   end

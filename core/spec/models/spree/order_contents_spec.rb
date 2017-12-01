@@ -120,7 +120,7 @@ RSpec.describe Spree::OrderContents, type: :model do
 
       context 'when the order has a taxable address' do
         before do
-          expect(order.tax_address.country_id).to be_present
+          expect(order.tax_address.country).to be_present
         end
 
         it 'creates a tax adjustment' do
