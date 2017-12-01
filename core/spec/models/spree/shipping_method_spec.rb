@@ -194,8 +194,8 @@ RSpec.describe Spree::ShippingMethod, type: :model do
   end
 
   describe ".available_for_address" do
-    let!(:included_country) { create(:country, iso: "US") }
-    let!(:excluded_country) { create(:country, iso: "CA") }
+    let!(:included_country) { Carmen::Country.coded('US') }
+    let!(:excluded_country) { Carmen::Country.coded('CA') }
     let!(:included_zone) { create(:zone, countries: [included_country]) }
     let!(:excluded_zone) { create(:zone, countries: [excluded_country]) }
     let!(:shipping_method) { create(:shipping_method, zones: [included_zone]) }
