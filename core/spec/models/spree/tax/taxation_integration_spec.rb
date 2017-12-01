@@ -552,8 +552,8 @@ RSpec.describe "Taxation system integration tests" do
 
   # Choosing New York here because in the US, states matter
   context 'selling from new york' do
-    let(:new_york) { create(:state, state_code: "NY") }
-    let(:united_states) { new_york.country }
+    let(:new_york) { Carmen::Country.coded('US').subregions.find { |state| state.code == 'NY' } }
+    let(:united_states) { new_york.parent }
     let(:new_york_zone) { create(:zone, states: [new_york]) }
     let(:united_states_zone) { create(:zone, countries: [united_states]) }
     # Creating two rates for books here to
