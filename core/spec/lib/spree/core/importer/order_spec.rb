@@ -4,8 +4,8 @@ module Spree
   module Core
     RSpec.describe Importer::Order do
       let!(:store) { create(:store) }
-      let!(:country) { create(:country) }
-      let!(:state) { country.states.first || create(:state, country: country) }
+      let!(:country) { Carmen::Country.coded('US') }
+      let!(:state) { country.subregions.first }
       let!(:stock_location) { create(:stock_location, admin_name: 'Admin Name') }
 
       let(:user) { stub_model(LegacyUser, email: 'fox@mudler.com') }
@@ -209,7 +209,8 @@ module Spree
           }
         end
 
-        let(:other_state) { create(:state, name: "Uhuhuh", country: create(:country)) }
+        # TODO: Check this is correct
+        let(:other_state) { country.subregions.last }
 
         before do
           ship_address.delete(:state_id)
