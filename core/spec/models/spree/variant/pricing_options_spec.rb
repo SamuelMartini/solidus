@@ -58,7 +58,7 @@ RSpec.describe Spree::Variant::PricingOptions do
   end
 
   context ".from_price" do
-    let(:country) { create(:country) }
+    let(:country) { Carmen::Country.coded('US') }
     let(:price) { create(:price, country: country) }
 
     subject { described_class.from_price(price) }
