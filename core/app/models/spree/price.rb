@@ -7,9 +7,8 @@ module Spree
     belongs_to :variant, -> { with_deleted }, class_name: 'Spree::Variant', touch: true
     # belongs_to :country, class_name: "Spree::Country", foreign_key: "country_iso", primary_key: "iso"
     # Should I continue to let this thing be country?
-    def country
-      Carmen::Country.coded(country_iso)
-    end
+
+    attr_accessor :country
 
     delegate :product, to: :variant
     delegate :tax_rates, to: :variant

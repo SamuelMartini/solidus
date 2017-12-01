@@ -25,7 +25,7 @@ RSpec.describe Spree::Variant::PriceSelector do
       end
 
       context "with the another country iso" do
-        let(:country) { create(:country, iso: "DE") }
+        let(:country) { Carmen::Country.coded('DE') }
 
         let(:pricing_options) do
           described_class.pricing_options_class.new(currency: "USD", country_iso: "DE")
