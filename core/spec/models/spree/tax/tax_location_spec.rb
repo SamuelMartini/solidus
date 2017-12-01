@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Spree::Tax::TaxLocation do
   let(:country) { Carmen::Country.coded('US') }
-  let(:state) { build_stubbed(:state) }
+  let(:state) { country.subregions.first }
 
   subject { described_class.new }
 
