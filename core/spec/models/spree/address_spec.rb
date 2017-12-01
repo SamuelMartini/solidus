@@ -91,7 +91,7 @@ RSpec.describe Spree::Address, type: :model do
         address.country = Carmen::Country.coded('US')
         # address.country = create :country, states_required: :true
         expect(address).to be_valid
-        expect(address.state_id).to be_nil
+        expect(address.state).to be_nil
       end
 
       it "both state and state_name are entered and country does contain the state" do
@@ -286,14 +286,16 @@ RSpec.describe Spree::Address, type: :model do
 
   describe '.taxation_attributes' do
     context 'both taxation and non-taxation attributes are present ' do
-      let(:address) { Spree::Address.new firstname: 'Michael', lastname: 'Jackson', state_id: 1, country_id: 2, zipcode: '12345' }
+      let(:country) { Carmen::Country.coded('US') }
+      let(:state) { country.subregions.first }
+      let(:address) { Spree::Address.new firstname: 'Michael', lastname: 'Jackson', state: state, country: country, zipcode: '12345' }
 
       it 'removes the non-taxation attributes' do
         expect(address.taxation_attributes).not_to eq('firstname' => 'Michael', 'lastname' => 'Jackson')
       end
 
       it 'returns only the taxation attributes' do
-        expect(address.taxation_attributes).to eq('state_id' => 1, 'country_id' => 2, 'zipcode' => '12345')
+        expect(address.taxation_attributes).to eq('state' => state, 'country' => country, 'zipcode' => '12345')
       end
     end
 
@@ -301,7 +303,7 @@ RSpec.describe Spree::Address, type: :model do
       let(:address) { Spree::Address.new firstname: 'Michael', lastname: 'Jackson' }
 
       it 'returns a subset of the attributes with the correct keys and nil values' do
-        expect(address.taxation_attributes).to eq('state_id' => nil, 'country_id' => nil, 'zipcode' => nil)
+        expect(address.taxation_attributes).to eq('state' => nil, 'country' => nil, 'zipcode' => nil)
       end
     end
   end

@@ -6,10 +6,8 @@ module Spree
   class Address < Spree::Base
     extend ActiveModel::ForbiddenAttributesProtection
 
-    # A Carmen::Country
-    attr_accessor :country
-    # A Carmen::Region
-    attr_accessor :state
+    serialize :country, Spree::CarmenSerializer
+    serialize :state, Spree::CarmenSerializer
 
     validates :firstname, :address1, :city, :country, presence: true
     validates :zipcode, presence: true, if: :require_zipcode?

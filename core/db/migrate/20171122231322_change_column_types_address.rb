@@ -8,6 +8,8 @@ class ChangeColumnTypesAddress < ActiveRecord::Migration[5.1]
     # add_column :spree_zones, :states, :text
     # add_column :spree_zones, :countries, :text
     add_column :spree_zones, :members, :text
+    add_column :spree_addresses, :country, :text
+    add_column :spree_addresses, :state, :text
     # add_column :spree_zones, :zone_membs, :text
     # rename_column :spree_prices, :country_iso, :country
     # change_column :spree_prices, :country, :string
