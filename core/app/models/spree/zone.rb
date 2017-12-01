@@ -1,27 +1,4 @@
-Carmen::Region.class_eval do
-  def to_hash
-    { type: type, code: code, name: name, subregions: subregions, parent: parent.code }
-  end
-end
-
 module Spree
-  class CarmenSerializer
-    def self.load(value)
-      return nil if value.nil?
-      JSON.parse(value).map do |place|
-        if place['type'] == 'country'
-          Carmen::Country.coded(place['code'])
-        else
-          Carmen::Country.coded(place['parent']).subregions.find { |p| p.code == place['code'] }
-        end
-      end
-    end
-
-    def self.dump(value)
-      value.to_json
-    end
-  end
-
   class Zone < Spree::Base
     has_many :tax_rates, dependent: :destroy, inverse_of: :zone
 
@@ -43,6 +20,14 @@ module Spree
 
     def states
       members.select { |member| member.class == Carmen::Region }
+    end
+
+    def countries=(places)
+      members = places
+    end
+
+    def states=(places)
+      members = places
     end
 
     scope :with_member_ids, ->(states, countries) do
