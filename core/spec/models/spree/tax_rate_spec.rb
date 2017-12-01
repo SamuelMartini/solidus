@@ -4,7 +4,7 @@ RSpec.describe Spree::TaxRate, type: :model do
   it { is_expected.to respond_to(:shipping_rate_taxes) }
 
   context '.for_address' do
-    let(:germany) { Carmen::Country.codeD('DE') }
+    let(:germany) { Carmen::Country.coded('DE') }
     let(:germany_zone) { create(:zone, countries: [germany]) }
     let!(:german_tax) { create(:tax_rate, zone: germany_zone) }
     let(:france) { Carmen::Country.coded('FR') }

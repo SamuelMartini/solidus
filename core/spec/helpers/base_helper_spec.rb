@@ -6,10 +6,11 @@ RSpec.describe Spree::BaseHelper, type: :helper do
   let(:current_store){ create :store }
 
   context "available_countries" do
-    let(:country) { create(:country) }
+    let(:country) { Carmen::Country.coded('US') }
 
+    # TODO: What is the point of this?
     before do
-      3.times { create(:country) }
+      3.times { Carmen::Country.coded('US') }
     end
 
     context "with no checkout zone defined" do
