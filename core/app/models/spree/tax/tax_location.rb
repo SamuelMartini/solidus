@@ -12,14 +12,14 @@ module Spree
       #
       # @see Spree::Zone.for_address
       #
-      # @param [Spree::Country] country a Spree::Country object, default: nil
-      # @param [Spree::State] state a Spree::State object, default: nil
+      # @param [Carmen::Country] country a Carmen::Country object, default: nil
+      # @param [Carmen::Region] state a Carmen::Region object, default: nil
       #
       # @return [Spree::Tax::TaxLocation] a Spree::Tax::TaxLocation object
       def initialize(country: nil, state: nil)
         # A carmen country is passed in
         @country_id = country && country.alpha_2_code
-        @state_id = state && state.id
+        @state_id = state && state.code
       end
 
       def ==(other)
