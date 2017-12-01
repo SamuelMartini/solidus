@@ -110,11 +110,11 @@ module Spree
       if checkout_zone && checkout_zone.kind == 'country'
         countries = checkout_zone.country_list
       else
-        countries = Country.all
+        contries = Carmen::Country.all
       end
 
       countries.collect do |country|
-        country.name = t(country.iso, scope: 'spree.country_names', default: country.name)
+        country.name = t(country.code, scope: 'spree.country_names', default: country.name)
         country
       end.sort_by { |c| c.name.parameterize }
     end
