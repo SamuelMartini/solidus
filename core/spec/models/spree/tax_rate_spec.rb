@@ -4,15 +4,15 @@ RSpec.describe Spree::TaxRate, type: :model do
   it { is_expected.to respond_to(:shipping_rate_taxes) }
 
   context '.for_address' do
-    let(:germany) { create(:country, iso: "DE") }
+    let(:germany) { Carmen::Country.codeD('DE') }
     let(:germany_zone) { create(:zone, countries: [germany]) }
     let!(:german_tax) { create(:tax_rate, zone: germany_zone) }
-    let(:france) { create(:country, iso: "FR") }
+    let(:france) { Carmen::Country.coded('FR') }
     let(:france_zone) { create(:zone, countries: [france]) }
     let!(:french_tax) { create(:tax_rate, zone: france_zone) }
     let(:eu_zone) { create(:zone, countries: [germany, france]) }
     let!(:eu_tax) { create(:tax_rate, zone: eu_zone) }
-    let(:usa) { create(:country, iso: "US") }
+    let(:usa) { Carmen::Country.coded('US') }
     let(:us_zone) { create(:zone, countries: [usa]) }
     let!(:us_tax) { create(:tax_rate, zone: us_zone) }
     let(:new_york) { create(:state, country: usa, state_code: "NY") }
@@ -92,8 +92,9 @@ RSpec.describe Spree::TaxRate, type: :model do
         end
 
         context "when the tax_zone is contained within a rate zone" do
-          let(:country1) { create :country }
-          let(:country2) { create :country }
+          # TODO: I think these are both supposed to be the same country
+          let(:country1) { Carmen::Country.coded('US') }
+          let(:country2) { Carmen::Country.coded('US') }
           let(:rate_zone) { create(:zone, countries: [country1, country2]) }
           let(:zone) { create(:zone, countries: [country1]) }
 
