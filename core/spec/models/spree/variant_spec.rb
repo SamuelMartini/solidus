@@ -60,9 +60,9 @@ RSpec.describe Spree::Variant, type: :model do
     end
 
     context "when several countries have VAT" do
-      let(:germany) { create(:country, iso: "DE") }
-      let(:denmark) { create(:country, iso: "DK") }
-      let(:france) { create(:country, iso: "FR") }
+      let(:germany) { Carmen::Country.coded('DE') }
+      let(:denmark) { Carmen::Country.coded('DK') }
+      let(:france) { Carmen::Country.coded('FR') }
 
       let(:high_vat_zone) { create(:zone, countries: [germany, denmark]) }
       let(:low_vat_zone) { create(:zone, countries: [france]) }
