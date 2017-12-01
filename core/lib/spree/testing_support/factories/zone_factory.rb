@@ -3,6 +3,7 @@ require 'spree/testing_support/sequences'
 FactoryBot.define do
   factory :global_zone, class: 'Spree::Zone' do
     name 'GlobalZone'
+    members []
     zone_members do |proxy|
       zone = proxy.instance_eval { @instance }
       Carmen::Country.all.map do |c|
