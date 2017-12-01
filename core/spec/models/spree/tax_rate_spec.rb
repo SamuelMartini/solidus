@@ -15,10 +15,10 @@ RSpec.describe Spree::TaxRate, type: :model do
     let(:usa) { Carmen::Country.coded('US') }
     let(:us_zone) { create(:zone, countries: [usa]) }
     let!(:us_tax) { create(:tax_rate, zone: us_zone) }
-    let(:new_york) { create(:state, country: usa, state_code: "NY") }
+    let(:new_york) { usa.subregions.find { |s| s.code == 'NY' } }
     let(:new_york_zone) { create(:zone, states: [new_york]) }
     let!(:new_york_tax) { create(:tax_rate, zone: new_york_zone) }
-    let(:alabama) { create(:state, country: usa, state_code: "AL") }
+    let(:alabama) { usa.subregions.find { |s| s.code == 'AL' } }
     let(:alabama_zone) { create(:zone, states: [alabama]) }
     let!(:alabama_tax) { create(:tax_rate, zone: alabama_zone) }
 
