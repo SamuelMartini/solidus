@@ -8,10 +8,10 @@ RSpec.describe Spree::Variant::VatPriceGenerator do
   subject { described_class.new(variant).run }
 
   context "with Germany as default admin country" do
-    let(:germany) { create(:country, iso: "DE") }
+    let(:germany) { Carmen::Country.coded('DE') }
     let(:germany_zone) { create(:zone, countries: [germany]) }
     let!(:german_vat) { create(:tax_rate, included_in_price: true, amount: 0.19, zone: germany_zone, tax_categories: [tax_category]) }
-    let(:france) { create(:country, iso: "FR") }
+    let(:france) { Carmen::Country.coded('FR') }
     let(:france_zone) { create(:zone, countries: [france]) }
     let!(:french_vat) { create(:tax_rate, included_in_price: true, amount: 0.20, zone: france_zone, tax_categories: [tax_category]) }
 
@@ -43,10 +43,10 @@ RSpec.describe Spree::Variant::VatPriceGenerator do
   end
 
   context "with no default admin country" do
-    let(:germany) { create(:country, iso: "DE") }
+    let(:germany) { Carmen::Country.coded('DE') }
     let(:germany_zone) { create(:zone, countries: [germany]) }
     let!(:german_vat) { create(:tax_rate, included_in_price: true, amount: 0.19, zone: germany_zone, tax_categories: [tax_category]) }
-    let(:france) { create(:country, iso: "FR") }
+    let(:france) { Carmen::Country.coded('FR') }
     let(:france_zone) { create(:zone, countries: [france]) }
     let!(:french_vat) { create(:tax_rate, included_in_price: true, amount: 0.20, zone: france_zone, tax_categories: [tax_category]) }
 
