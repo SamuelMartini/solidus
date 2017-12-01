@@ -17,7 +17,7 @@ FactoryBot.define do
     members []
 
     trait :with_country do
-      countries { [Carmen::Country.coded('US')] }
+      members { [Carmen::Country.coded('US')] }
     end
   end
 end
