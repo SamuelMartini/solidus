@@ -39,8 +39,8 @@ RSpec.describe 'address factory' do
 
       it 'works' do
         expect(subject).to be_valid
-        expect(subject.state.abbr).to eq("NY")
-        expect(subject.country.iso).to eq("US")
+        expect(subject.state.code).to eq("NY")
+        expect(subject.country.alpha_2_code).to eq("US")
       end
     end
   end
@@ -52,8 +52,6 @@ RSpec.describe 'address factory' do
     it 'shares the same country and state objects' do
       expect(address1.country).to eq(address2.country)
       expect(address1.state).to eq(address2.state)
-      expect(Spree::Country.count).to eq(1)
-      expect(Spree::State.count).to eq(1)
     end
   end
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Tax::TaxLocation do
-  let(:country) { build_stubbed(:country) }
+  let(:country) { Carmen::Country.coded('US') }
   let(:state) { build_stubbed(:state) }
 
   subject { described_class.new }
@@ -30,14 +30,14 @@ RSpec.describe Spree::Tax::TaxLocation do
     context 'with a country object' do
       let(:args) { { country: country } }
 
-      it "will yield a location with that country's id" do
-        expect(subject.country_id).to eq(country.id)
+      it "will yield a location with that country's alpha 2 code" do
+        expect(subject.country_id).to eq(country.alpha_2_code)
       end
     end
   end
 
   describe "#country" do
-    let(:country) { create(:country) }
+    let(:country) { Carmen::Country.coded('US') }
     subject { described_class.new(args).country }
 
     context 'with a country object' do

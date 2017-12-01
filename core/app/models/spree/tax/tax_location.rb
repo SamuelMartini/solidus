@@ -17,7 +17,8 @@ module Spree
       #
       # @return [Spree::Tax::TaxLocation] a Spree::Tax::TaxLocation object
       def initialize(country: nil, state: nil)
-        @country_id = country && country.id
+        # A carmen country is passed in
+        @country_id = country && country.alpha_2_code
         @state_id = state && state.id
       end
 
@@ -26,7 +27,7 @@ module Spree
       end
 
       def country
-        Spree::Country.find_by(id: country_id)
+        Carmen::Country.coded(country_id)
       end
 
       def empty?

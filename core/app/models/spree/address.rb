@@ -8,7 +8,6 @@ module Spree
 
     # A Carmen::Country
     attr_accessor :country
-    # serialize :country, JSON
     # A Carmen::Region
     attr_accessor :state
 

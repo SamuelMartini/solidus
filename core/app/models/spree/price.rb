@@ -5,7 +5,11 @@ module Spree
     MAXIMUM_AMOUNT = BigDecimal('99_999_999.99')
 
     belongs_to :variant, -> { with_deleted }, class_name: 'Spree::Variant', touch: true
-    belongs_to :country, class_name: "Spree::Country", foreign_key: "country_iso", primary_key: "iso"
+    # belongs_to :country, class_name: "Spree::Country", foreign_key: "country_iso", primary_key: "iso"
+    # Should I continue to let this thing be country?
+    def country
+      Carmen::Country.coded(country_iso)
+    end
 
     delegate :product, to: :variant
     delegate :tax_rates, to: :variant
@@ -16,12 +20,13 @@ module Spree
       less_than_or_equal_to: MAXIMUM_AMOUNT
     }
     validates :currency, inclusion: { in: ::Money::Currency.all.map(&:iso_code), message: :invalid_code }
-    validates :country, presence: true, unless: -> { for_any_country? }
+    # validates :country, presence: true, unless: -> { for_any_country? }
+    validates :country_iso, inclusion: { in: Carmen::Country.all.map(&:alpha_2_code) }, unless: -> { for_any_country? }
 
     scope :currently_valid, -> { order("country_iso IS NULL, updated_at DESC, id DESC") }
     scope :for_master, -> { joins(:variant).where(spree_variants: { is_master: true }) }
     scope :for_variant, -> { joins(:variant).where(spree_variants: { is_master: false }) }
-    scope :for_any_country, -> { where(country: nil) }
+    scope :for_any_country, -> { where(country_iso: nil) }
     scope :with_default_attributes, -> { where(Spree::Config.default_pricing_options.desired_attributes) }
 
     extend DisplayMoney

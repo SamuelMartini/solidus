@@ -64,7 +64,7 @@ RSpec.describe Spree::Price, type: :model do
       end
 
       context 'when country iso is a country code' do
-        let!(:country) { create(:country, iso: "DE") }
+        let!(:country) { Carmen::Country.coded('DE') }
         let(:country_iso) { "DE" }
 
         it { is_expected.to be_valid }
@@ -87,7 +87,7 @@ RSpec.describe Spree::Price, type: :model do
     end
 
     describe '#country' do
-      let!(:country) { create(:country, iso: "DE") }
+      let!(:country) { Carmen::Country.coded('DE') }
       let(:price) { create(:price, country_iso: "DE") }
 
       it 'returns the country object' do
@@ -122,9 +122,8 @@ RSpec.describe Spree::Price, type: :model do
 
   describe 'scopes' do
     describe '.for_any_country' do
-      let(:country) { create(:country) }
+      let(:country) { Carmen::Country.coded('US') }
       let!(:fallback_price) { create(:price, country_iso: nil) }
-      let!(:country_price) { create(:price, country: country) }
 
       subject { described_class.for_any_country }
 
@@ -133,13 +132,13 @@ RSpec.describe Spree::Price, type: :model do
   end
 
   describe 'net_amount' do
-    let(:country) { create(:country, iso: "DE") }
+    let(:country) { Carmen::Country.coded('DE') }
     let(:zone) { create(:zone, countries: [country]) }
     let!(:tax_rate) { create(:tax_rate, included_in_price: true, zone: zone, tax_categories: [variant.tax_category]) }
 
     let(:variant) { create(:product).master }
 
-    let(:price) { variant.prices.create(amount: 20, country: country) }
+    let(:price) { variant.prices.create(amount: 20, country_iso: country.alpha_2_code) }
 
     subject { price.net_amount }
 

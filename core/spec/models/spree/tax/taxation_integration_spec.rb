@@ -51,9 +51,9 @@ RSpec.describe "Taxation system integration tests" do
   let(:shipping_rate) { shipment.shipping_rates.first }
 
   context 'selling from germany' do
-    let(:germany) { create :country, iso: "DE" }
+    let(:germany) { Carmen::Country.coded('DE') }
     let!(:germany_zone) { create :zone, countries: [germany] }
-    let(:romania) { create(:country, iso: "RO") }
+    let(:romania) { Carmen::Country.coded('RO') }
     let(:romania_zone) { create(:zone, countries: [romania] ) }
     let(:eu_zone) { create(:zone, countries: [romania, germany]) }
     let(:world_zone) { create(:zone, :with_country) }

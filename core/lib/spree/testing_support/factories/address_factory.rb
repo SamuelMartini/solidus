@@ -1,5 +1,4 @@
-require 'spree/testing_support/factories/state_factory'
-require 'spree/testing_support/factories/country_factory'
+require 'carmen'
 
 FactoryBot.define do
   factory :address, class: 'Spree::Address' do
@@ -20,15 +19,14 @@ FactoryBot.define do
     alternative_phone '555-555-0199'
 
     state do |address|
-      Spree::State.joins(:country).where('spree_countries.iso = (?)', country_iso_code).find_by(abbr: state_code) ||
-        address.association(:state, country_iso: country_iso_code, state_code: state_code)
+      Carmen::Country.coded(country_iso_code).subregions.find { |state| state.code == state_code }
     end
 
     country do |address|
       if address.state
-        address.state.country
+        Carmen::Country.named(address.state.parent.name)
       else
-        address.association(:country, iso: country_iso_code)
+        Carmen::Country.coded(country_iso_code)
       end
     end
   end

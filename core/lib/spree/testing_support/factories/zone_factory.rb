@@ -1,13 +1,12 @@
 require 'spree/testing_support/sequences'
-require 'spree/testing_support/factories/country_factory'
 
 FactoryBot.define do
   factory :global_zone, class: 'Spree::Zone' do
     name 'GlobalZone'
     zone_members do |proxy|
       zone = proxy.instance_eval { @instance }
-      Spree::Country.all.map do |c|
-        Spree::ZoneMember.create(zoneable: c, zone: zone)
+      Carmen::Country.all.map do |c|
+        zone.zone_members.push(c)
       end
     end
   end
@@ -16,7 +15,7 @@ FactoryBot.define do
     sequence(:name) { |i| "Zone #{i}" }
 
     trait :with_country do
-      countries { [create(:country)] }
+      countries { [Carmen::Country.coded('US')] }
     end
   end
 end
