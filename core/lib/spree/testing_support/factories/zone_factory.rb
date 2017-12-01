@@ -6,13 +6,14 @@ FactoryBot.define do
     zone_members do |proxy|
       zone = proxy.instance_eval { @instance }
       Carmen::Country.all.map do |c|
-        zone.zone_members.push(c)
+        zone.add(c)
       end
     end
   end
 
   factory :zone, class: 'Spree::Zone' do
     sequence(:name) { |i| "Zone #{i}" }
+    members []
 
     trait :with_country do
       countries { [Carmen::Country.coded('US')] }
