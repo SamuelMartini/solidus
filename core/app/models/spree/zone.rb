@@ -23,11 +23,11 @@ module Spree
     end
 
     def countries=(places)
-      members = places
+      update_attributes(members: places)
     end
 
     def states=(places)
-      members = places
+      update_attributes(members: places)
     end
 
     scope :with_member_ids, ->(states, countries) do

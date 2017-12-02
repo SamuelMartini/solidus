@@ -145,7 +145,7 @@ RSpec.describe Spree::Zone, type: :model do
 
     context "has countries associated" do
       let!(:zone) do
-        create(:zone, members: [country])
+        create(:zone, countries: [country])
       end
 
       it "can access associated countries" do
@@ -156,7 +156,7 @@ RSpec.describe Spree::Zone, type: :model do
     context "has states associated" do
       let!(:state) { country.subregions.first }
       let!(:zone) do
-        create(:zone, members: [state])
+        create(:zone, countries: [state])
       end
 
       it "can access associated states" do
