@@ -1,13 +1,13 @@
 module Spree
   module Tax
     # A class exclusively used as a drop-in replacement for a default tax address.
-    # It responds to `:country_id` and `:state_id`.
+    # It responds to `:country` and `:state`.
+    # NO!!!!!! TODO
     #
-    # @attr_reader [Integer] country_id the ID of a Spree::Country object
-    # @attr_reader [Integer] state_id the ID of a Spree::State object
+    # @attr_reader [Carmen::Country] country a Carmen::Country object
+    # @attr_reader [Carmen::Region] state a Carmen::Region object
     class TaxLocation
-      attr_reader :country_id, :state_id
-      attr_reader :country, :state
+      attr_accessor :country, :state
 
       deprecate :country_id, 'Use #country instead', deprcator: Spree::Deprecation
       deprecate :state_id, 'Use #state instead', deprcator: Spree::Deprecation
@@ -24,16 +24,14 @@ module Spree
         # A carmen country is passed in
         @country = country
         @state = state
-        @country_id = country && country.alpha_2_code
-        @state_id = state && state.code
       end
 
       def ==(other)
-        state_id == other.state_id && country_id == other.country_id
+        state == other.state && country == other.country
       end
 
       def empty?
-        country_id.nil? && state_id.nil? && country.nil? && state.nil?
+        country.nil? && state.nil?
       end
     end
   end

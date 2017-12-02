@@ -11,8 +11,8 @@ RSpec.describe Spree::Tax::TaxLocation do
 
   describe "default values" do
     it "has a nil state and country id" do
-      expect(subject.state_id).to eq(nil)
-      expect(subject.country_id).to eq(nil)
+      expect(subject.state).to eq(nil)
+      expect(subject.country).to eq(nil)
     end
   end
 
@@ -31,7 +31,7 @@ RSpec.describe Spree::Tax::TaxLocation do
       let(:args) { { country: country } }
 
       it "will yield a location with that country's alpha 2 code" do
-        expect(subject.country_id).to eq(country.alpha_2_code)
+        expect(subject.country.code).to eq(country.alpha_2_code)
       end
     end
   end
