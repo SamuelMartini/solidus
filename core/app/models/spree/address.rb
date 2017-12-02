@@ -9,6 +9,9 @@ module Spree
     serialize :country, Spree::CarmenSerializer
     serialize :state, Spree::CarmenSerializer
 
+    deprecate :country_id, 'Use #country instead.', deprecator: Spree::Deprecation
+    deprecate :state_id, 'Use #state instead.', deprecator: Spree::Deprecation
+
     validates :firstname, :address1, :city, :country, presence: true
     validates :zipcode, presence: true, if: :require_zipcode?
     validates :phone, presence: true, if: :require_phone?
