@@ -5,10 +5,8 @@ module Spree
     MAXIMUM_AMOUNT = BigDecimal('99_999_999.99')
 
     belongs_to :variant, -> { with_deleted }, class_name: 'Spree::Variant', touch: true
-    # belongs_to :country, class_name: "Spree::Country", foreign_key: "country_iso", primary_key: "iso"
-    # Should I continue to let this thing be country?
 
-    attr_accessor :country
+    serialize :country, Spree::CarmenSerializer
 
     delegate :product, to: :variant
     delegate :tax_rates, to: :variant
@@ -19,7 +17,8 @@ module Spree
       less_than_or_equal_to: MAXIMUM_AMOUNT
     }
     validates :currency, inclusion: { in: ::Money::Currency.all.map(&:iso_code), message: :invalid_code }
-    # validates :country, presence: true, unless: -> { for_any_country? }
+
+    validates :country, presence: true, unless: -> { for_any_country? }
     validates :country_iso, inclusion: { in: Carmen::Country.all.map(&:alpha_2_code) }, unless: -> { for_any_country? }
 
     scope :currently_valid, -> { order("country_iso IS NULL, updated_at DESC, id DESC") }
@@ -64,12 +63,14 @@ module Spree
     end
 
     def country_iso=(country_iso)
+      self.country = Carmen::Country.coded(country_iso)
       self[:country_iso] = country_iso.presence
     end
 
     private
 
     def sum_of_vat_amounts
+      # THIS IS BROKEN
       return 0 unless variant.tax_category
       tax_rates.included_in_price.for_country(country).sum(:amount)
     end

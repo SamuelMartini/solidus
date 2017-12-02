@@ -11,7 +11,8 @@ class ChangeColumnTypesAddress < ActiveRecord::Migration[5.1]
     add_column :spree_addresses, :country, :text
     add_column :spree_addresses, :state, :text
 
-    remove_column :spree_prices, :country
+    remove_column :spree_prices, :country_iso
+    add_column :spree_prices, :country_iso, :string
     add_column :spree_prices, :country, :text
 
     remove_column :spree_addresses, :state_id
