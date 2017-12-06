@@ -42,6 +42,11 @@ module Spree
     yield(Spree::Config)
   end
 
+  # Convenience method to access the configured event bus
+  def self.event_bus
+    Spree::Config.event_bus
+  end
+
   module Core
     class GatewayError < RuntimeError; end
 
