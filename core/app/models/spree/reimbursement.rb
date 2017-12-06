@@ -51,10 +51,12 @@ module Spree
     # These are called if the call to "reimburse!" succeeds.
     class_attribute :reimbursement_success_hooks
     self.reimbursement_success_hooks = []
+    deprecate :reimbursement_success_hooks, 'Add a processor for the :reimbursement_processed event instead.', deprecator: Spree::Deprecation
 
     # These are called if the call to "reimburse!" fails.
     class_attribute :reimbursement_failure_hooks
     self.reimbursement_failure_hooks = []
+    deprecate :reimbursement_failure_hooks, 'Add a processor for the :reimbursement_failed event instead.', deprecator: Spree::Deprecation
 
     state_machine :reimbursement_status, initial: :pending do
       event :errored do
