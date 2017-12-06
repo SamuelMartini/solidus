@@ -39,14 +39,13 @@ class Spree::OrderCancellations
         end
 
         update_shipped_shipments(inventory_units)
-        Spree::OrderMailer.inventory_cancellation_email(@order, inventory_units.to_a).deliver_later if Spree::OrderCancellations.send_cancellation_mailer
+        Spree.event_bus.publish(
+          :order_inventory_cancelled,
+          Spree::Events::OrderInventoryCancelledEvent.new(order: @order, inventory_units: inventory_units.to_a)
+        )
       end
 
       @order.recalculate
-
-      if short_ship_tax_notifier
-        short_ship_tax_notifier.call(unit_cancels)
-      end
     end
 
     unit_cancels

@@ -95,27 +95,9 @@ RSpec.describe Spree::OrderCancellations do
       expect { subject }.to change { order.total }.by(-10.0)
     end
 
-    it "sends a cancellation email" do
-      mail_double = double
-      expect(Spree::OrderMailer).to receive(:inventory_cancellation_email).with(order, [inventory_unit]).and_return(mail_double)
-      expect(mail_double).to receive(:deliver_later)
+    it "sends event notifications" do
+      expect(Spree.event_bus).to receive(:publish).with(:order_inventory_cancelled, instance_of(Spree::Events::OrderInventoryCancelledEvent))
       subject
-    end
-
-    context "when send_cancellation_mailer is false" do
-      subject { Spree::OrderCancellations.new(order).short_ship([inventory_unit]) }
-
-      before do
-        @original_send_boolean = Spree::OrderCancellations.send_cancellation_mailer
-        Spree::OrderCancellations.send_cancellation_mailer = false
-      end
-
-      after { Spree::OrderCancellations.send_cancellation_mailer = @original_send_boolean }
-
-      it "does not send a cancellation email" do
-        expect(Spree::OrderMailer).not_to receive(:inventory_cancellation_email)
-        subject
-      end
     end
 
     context "with a who" do
@@ -162,28 +144,6 @@ RSpec.describe Spree::OrderCancellations do
           ]
         )
         expect(line_item.total).to eq 0
-      end
-    end
-
-    describe 'short_ship_tax_notifier' do
-      context 'when present' do
-        let(:short_ship_tax_notifier) { double }
-
-        before do
-          @old_notifier = Spree::OrderCancellations.short_ship_tax_notifier
-          Spree::OrderCancellations.short_ship_tax_notifier = short_ship_tax_notifier
-        end
-        after do
-          Spree::OrderCancellations.short_ship_tax_notifier = @old_notifier
-        end
-
-        it 'calls the short_ship_tax_notifier' do
-          expect(short_ship_tax_notifier).to receive(:call) do |unit_cancels|
-            expect(unit_cancels.map(&:inventory_unit)).to match_array([inventory_unit])
-          end
-
-          order.cancellations.short_ship([inventory_unit])
-        end
       end
     end
   end
