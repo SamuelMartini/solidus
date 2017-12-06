@@ -6,6 +6,7 @@ class Spree::OrderCancellations
   # set short_ship_tax_notifier to an object that responds to:
   #     #call(unit_cancels)
   class_attribute :short_ship_tax_notifier
+  deprecate :short_ship_tax_notifier, 'Add a processor for the :order_inventory_cancelled event instead.', deprecator: Spree::Deprecation
 
   # allows sending an email when inventory is cancelled
   class_attribute :send_cancellation_mailer
