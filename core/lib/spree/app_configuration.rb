@@ -389,6 +389,10 @@ module Spree
       @stock_configuration ||= Spree::Core::StockConfiguration.new
     end
 
+    def event_bus
+      @event_bus_class ||= Spree::EventBus.instance
+    end
+
     def roles
       @roles ||= Spree::RoleConfiguration.new.tap do |roles|
         roles.assign_permissions :default, ['Spree::PermissionSets::DefaultCustomer']
