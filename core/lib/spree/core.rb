@@ -12,6 +12,7 @@ require 'ransack'
 require 'state_machines-activerecord'
 
 require 'carmen'
+require 'spree/carmen_decorator'
 
 require 'spree/deprecation'
 
