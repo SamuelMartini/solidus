@@ -139,7 +139,7 @@ RSpec.describe Spree::Address, type: :model do
 
   context ".build_default" do
     context "no user given" do
-      let!(:default_country) { create(:country) }
+      let!(:default_country) { Carmen::Country.coded('US') }
 
       context 'has a default country' do
         before do
@@ -164,7 +164,7 @@ RSpec.describe Spree::Address, type: :model do
   context '.factory' do
     context 'with attributes that use setters defined in Address' do
       let(:address_attributes) { attributes_for(:address, country_id: nil, country_iso: country.iso) }
-      let(:country) { create(:country, iso: 'ZW') }
+      let(:country) { Carmen::Country.coded('ZW') }
 
       it 'uses the setters' do
         expect(subject.factory(address_attributes).country_id).to eq(country.id)
@@ -310,7 +310,7 @@ RSpec.describe Spree::Address, type: :model do
 
   context '#country_iso=' do
     let(:address) { build(:address, country_id: nil) }
-    let(:country) { create(:country, iso: 'ZW') }
+    let(:country) { Carmen::Country.coded('ZW') }
 
     it 'sets the country to the country with the matching iso code' do
       address.country_iso = country.iso
