@@ -11,6 +11,8 @@ require 'paranoia'
 require 'ransack'
 require 'state_machines-activerecord'
 
+require 'carmen'
+
 require 'spree/deprecation'
 
 # This is required because ActiveModel::Validations#invalid? conflicts with the
@@ -86,3 +88,5 @@ require 'spree/permission_sets'
 require 'spree/preferences/store'
 require 'spree/preferences/static_model_preferences'
 require 'spree/preferences/scoped_store'
+
+require 'spree/serialize_carmen'
