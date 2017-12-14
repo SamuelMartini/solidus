@@ -144,7 +144,7 @@ module Spree
         city: city,
         state: state_text,
         zip: zipcode,
-        country: country.try(:iso),
+        country: country.try(:code),
         phone: phone
       }
     end
