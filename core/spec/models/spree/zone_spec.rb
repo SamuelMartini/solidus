@@ -68,7 +68,7 @@ RSpec.describe Spree::Zone, type: :model do
 
       it 'should return a list of countries' do
         Spree::Deprecation.silence do
-          expect(state_zone.country_list).to eq([state.country])
+          expect(state_zone.country_list).to eq([state.parent])
         end
       end
     end
