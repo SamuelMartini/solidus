@@ -87,9 +87,9 @@ module Spree
       "#{firstname} #{lastname}".strip
     end
 
-    # @return [String] a string representation of this state
+    # @return [String] the ISO code for this state
     def state_text
-      state.try(:abbr) || state.try(:name) || state_name
+      state.try(:code) || state_name
     end
 
     def to_s

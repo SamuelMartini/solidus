@@ -352,16 +352,10 @@ RSpec.describe Spree::Address, type: :model do
       specify { expect(address.state_text).to eq('virginia') }
     end
 
-    context 'both name and abbr is present' do
-      let(:state) { Spree::State.new name: 'virginia', abbr: 'va' }
+    context 'state is not blank' do
+      let(:state) { Carmen::Country.coded('US').subregions.find { |s| s.name == 'Virginia' } }
       let(:address) { Spree::Address.new state: state }
-      specify { expect(address.state_text).to eq('va') }
-    end
-
-    context 'only name is present' do
-      let(:state) { Spree::State.new name: 'virginia', abbr: nil }
-      let(:address) { Spree::Address.new state: state }
-      specify { expect(address.state_text).to eq('virginia') }
+      specify { expect(address.state_text).to eq('VA') }
     end
   end
 
