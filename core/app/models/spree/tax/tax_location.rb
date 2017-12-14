@@ -1,36 +1,32 @@
 module Spree
   module Tax
     # A class exclusively used as a drop-in replacement for a default tax address.
-    # It responds to `:country_id` and `:state_id`.
+    # It responds to `:country` and `:state`.
     #
-    # @attr_reader [Integer] country_id the ID of a Spree::Country object
-    # @attr_reader [Integer] state_id the ID of a Spree::State object
+    # @attr_reader [Integer] a Carmen::Country object
+    # @attr_reader [Integer] a Carmen::Region object
     class TaxLocation
-      attr_reader :country_id, :state_id
+      attr_reader :country, :state
 
       # Create a new TaxLocation object
       #
       # @see Spree::Zone.for_address
       #
-      # @param [Spree::Country] country a Spree::Country object, default: nil
-      # @param [Spree::State] state a Spree::State object, default: nil
+      # @param [Spree::Country] country a Carmen::Country object, default: nil
+      # @param [Spree::State] state a Carmen::Region object, default: nil
       #
       # @return [Spree::Tax::TaxLocation] a Spree::Tax::TaxLocation object
       def initialize(country: nil, state: nil)
-        @country_id = country && country.id
-        @state_id = state && state.id
+        @country = country
+        @state = state
       end
 
       def ==(other)
-        state_id == other.state_id && country_id == other.country_id
-      end
-
-      def country
-        Spree::Country.find_by(id: country_id)
+        state == other.state && country == other.country
       end
 
       def empty?
-        country_id.nil? && state_id.nil?
+        country.nil? && state.nil?
       end
     end
   end

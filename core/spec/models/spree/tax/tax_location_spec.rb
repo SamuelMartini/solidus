@@ -1,18 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Tax::TaxLocation do
-  let(:country) { build_stubbed(:country) }
-  let(:state) { build_stubbed(:state) }
+  let(:country) { Carmen::Country.coded('US') }
+  let(:state) { country.subregions.first }
 
   subject { described_class.new }
 
-  it { is_expected.to respond_to(:state_id) }
-  it { is_expected.to respond_to(:country_id) }
+  it { is_expected.to respond_to(:state) }
+  it { is_expected.to respond_to(:country) }
 
   describe "default values" do
-    it "has a nil state and country id" do
-      expect(subject.state_id).to eq(nil)
-      expect(subject.country_id).to eq(nil)
+    it "has a nil state and country" do
+      expect(subject.state).to eq(nil)
+      expect(subject.country).to eq(nil)
     end
   end
 
@@ -31,13 +31,13 @@ RSpec.describe Spree::Tax::TaxLocation do
       let(:args) { { country: country } }
 
       it "will yield a location with that country's id" do
-        expect(subject.country_id).to eq(country.id)
+        expect(subject.country).to eq(country)
       end
     end
   end
 
   describe "#country" do
-    let(:country) { create(:country) }
+    let(:country) { Carmen::Country.coded('US') }
     subject { described_class.new(args).country }
 
     context 'with a country object' do
