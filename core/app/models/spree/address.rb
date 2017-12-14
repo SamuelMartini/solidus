@@ -9,7 +9,7 @@ module Spree
     serialize :country, Spree::SerializeCarmen
     serialize :state, Spree::SerializeCarmen
 
-    validates :firstname, :address1, :city, :country_id, presence: true
+    validates :firstname, :address1, :city, :country, presence: true
     validates :zipcode, presence: true, if: :require_zipcode?
     validates :phone, presence: true, if: :require_phone?
 
@@ -20,7 +20,7 @@ module Spree
     alias_attribute :last_name, :lastname
 
     DB_ONLY_ATTRS = %w(id updated_at created_at)
-    TAXATION_ATTRS = %w(state_id country_id zipcode)
+    TAXATION_ATTRS = %w(state country zipcode)
 
     self.whitelisted_ransackable_attributes = %w[firstname lastname]
 
@@ -28,8 +28,14 @@ module Spree
       where(value_attributes(attributes))
     end
 
+    # TODO: This shouldn't raise an error
     def self.build_default
-      new(country: Spree::Country.default)
+      country = Carmen::Country.coded(Spree::Config.default_country_iso)
+      if country.nil?
+        raise ActiveRecord::RecordNotFound
+      else
+        new(country: country)
+      end
     end
 
     # @return [Address] an equal address already in the database or a newly created one
@@ -167,7 +173,10 @@ module Spree
     # @return [Country] setter that sets self.country to the Country with a matching 2 letter iso
     # @raise [ActiveRecord::RecordNotFound] if country with the iso doesn't exist
     def country_iso=(iso)
-      self.country = Spree::Country.find_by!(iso: iso)
+      self.country = Carmen::Country.coded(iso)
+      if self.country.nil?
+        raise ActiveRecord::RecordNotFound, "Couldn't find Spree::Country"
+      end
     end
 
     def country_iso
@@ -179,12 +188,12 @@ module Spree
     def state_validate
       # Skip state validation without country (also required)
       # or when disabled by preference
-      return if country.blank? || !Spree::Config[:address_requires_state]
-      return unless country.states_required
+      return if country.nil? || !Spree::Config[:address_requires_state]
+      return unless country.subregions?
 
       # ensure associated state belongs to country
       if state.present?
-        if state.country == country
+        if state.parent == country
           self.state_name = nil # not required as we have a valid state and country combo
         elsif state_name.present?
           self.state = nil
@@ -195,8 +204,8 @@ module Spree
 
       # ensure state_name belongs to country without states, or that it matches a predefined state name/abbr
       if state_name.present?
-        if country.states.present?
-          states = country.states.with_name_or_abbr(state_name)
+        if country.subregions?
+          states = country.subregions.find_all { |state| state.name.downcase == state_name }
 
           if states.size == 1
             self.state = states.first
@@ -212,7 +221,7 @@ module Spree
     end
 
     def validate_state_matches_country
-      if state && state.country != country
+      if state && state.parent != country
         errors.add(:state, :does_not_match_country)
       end
     end
