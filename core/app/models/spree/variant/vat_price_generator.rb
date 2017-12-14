@@ -45,7 +45,7 @@ module Spree
       # nil is added to the array so we always have an export price.
       def country_isos_requiring_price
         return [nil] unless variant.tax_category
-        [nil] + variant_vat_rates.map(&:zone).flat_map(&:countries).flat_map(&:iso)
+        [nil] + variant_vat_rates.map(&:zone).flat_map(&:countries).flat_map(&:code)
       end
 
       def vat_for_country_iso(country_iso)
