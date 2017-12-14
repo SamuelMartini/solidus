@@ -20,7 +20,8 @@ FactoryBot.define do
     alternative_phone '555-555-0199'
 
     state do |address|
-      Carmen::Country.coded(country_iso_code).subregions.find { |s| s.code == state_code }
+      Carmen::Country.coded(country_iso_code).subregions.find { |s| s.code == state_code } ||
+        Carmen::Country.coded(country_iso_code).subregions.first
     end
 
     country do |address|
