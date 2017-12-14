@@ -189,6 +189,7 @@ module Spree
       # Skip state validation without country (also required)
       # or when disabled by preference
       return if country.nil? || !Spree::Config[:address_requires_state]
+      return if state.nil? && state_name.nil? #TODO: WHAT THE ????
       return unless country.subregions?
 
       # ensure associated state belongs to country
