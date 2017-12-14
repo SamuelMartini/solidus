@@ -6,8 +6,8 @@ module Spree
   class Address < Spree::Base
     extend ActiveModel::ForbiddenAttributesProtection
 
-    belongs_to :country, class_name: "Spree::Country"
-    belongs_to :state, class_name: "Spree::State"
+    serialize :country, Spree::SerializeCarmen
+    serialize :state, Spree::SerializeCarmen
 
     validates :firstname, :address1, :city, :country_id, presence: true
     validates :zipcode, presence: true, if: :require_zipcode?
