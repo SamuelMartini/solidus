@@ -64,7 +64,7 @@ RSpec.describe Spree::Price, type: :model do
       end
 
       context 'when country iso is a country code' do
-        let!(:country) { create(:country, iso: "DE") }
+        let!(:country) { Carmen::Country.coded('DE') }
         let(:country_iso) { "DE" }
 
         it { is_expected.to be_valid }
@@ -87,7 +87,7 @@ RSpec.describe Spree::Price, type: :model do
     end
 
     describe '#country' do
-      let!(:country) { create(:country, iso: "DE") }
+      let!(:country) { Carmen::Country.coded('DE') }
       let(:price) { create(:price, country_iso: "DE") }
 
       it 'returns the country object' do
