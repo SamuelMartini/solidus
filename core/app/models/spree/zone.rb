@@ -14,16 +14,14 @@ module Spree
       if states.empty? && countries.empty?
         none
       else
-        Spree::Zone.all.select do |zone|
-          if zone.countries.any?
-            (zone.countries & countries).any? ||
-              zone.countries.any? { |country| (country.subregions & states).any? }
-          elsif zone.states.any?
-            (zone.states & states).any?
-          else
-            none
-          end
-        end
+        spree_zone_members_table = Spree::ZoneMember.arel_table
+        matching_state =
+          spree_zone_members_table[:zoneable_type].eq('Spree::State').
+          and(spree_zone_members_table[:zoneable].in(states))
+        matching_country =
+          spree_zone_members_table[:zoneable_type].eq('Spree::Country').
+          and(spree_zone_members_table[:zoneable].in(countries))
+        joins(:zone_members).where(matching_state.or(matching_country)).distinct
       end
     end
 
@@ -48,7 +46,7 @@ module Spree
       return none unless zone
       countries = zone.countries
       states = zone.states
-      with_member_ids(states, countries).uniq # TODO: NOT DISTINCT, DOCUMENT THIS
+      with_member_ids(states, countries).distinct # TODO: NOT DISTINCT, DOCUMENT THIS
     end
 
     def kind
