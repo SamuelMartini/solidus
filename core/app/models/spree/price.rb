@@ -5,7 +5,6 @@ module Spree
     MAXIMUM_AMOUNT = BigDecimal('99_999_999.99')
 
     belongs_to :variant, -> { with_deleted }, class_name: 'Spree::Variant', touch: true
-    belongs_to :country, class_name: "Spree::Country", foreign_key: "country_iso", primary_key: "iso"
 
     delegate :product, to: :variant
     delegate :tax_rates, to: :variant
@@ -21,7 +20,7 @@ module Spree
     scope :currently_valid, -> { order("country_iso IS NULL, updated_at DESC, id DESC") }
     scope :for_master, -> { joins(:variant).where(spree_variants: { is_master: true }) }
     scope :for_variant, -> { joins(:variant).where(spree_variants: { is_master: false }) }
-    scope :for_any_country, -> { where(country: nil) }
+    scope :for_any_country, -> { where(country_iso: nil) }
     scope :with_default_attributes, -> { where(Spree::Config.default_pricing_options.desired_attributes) }
 
     extend DisplayMoney
@@ -33,6 +32,14 @@ module Spree
     # An alias for #amount
     def price
       amount
+    end
+
+    def country=(country)
+      country_iso = country.code
+    end
+
+    def country
+      Carmen::Country.coded(country_iso)
     end
 
     # Sets this price's amount to a new value, parsing it if the new value is
@@ -48,7 +55,7 @@ module Spree
     end
 
     def for_any_country?
-      country_iso.nil?
+      country_iso.nil? || country_iso.empty?
     end
 
     def display_country
@@ -59,9 +66,9 @@ module Spree
       end
     end
 
-    def country_iso=(country_iso)
-      self[:country_iso] = country_iso.presence
-    end
+    # def country_iso=(country_iso)
+    #   self[:country_iso] = country_iso.presence
+    # end
 
     private
 
