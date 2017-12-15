@@ -122,7 +122,7 @@ RSpec.describe Spree::Price, type: :model do
 
   describe 'scopes' do
     describe '.for_any_country' do
-      let(:country) { create(:country) }
+      let(:country) { Carmen::Country.coded('US') }
       let!(:fallback_price) { create(:price, country_iso: nil) }
       let!(:country_price) { create(:price, country: country) }
 
@@ -133,7 +133,7 @@ RSpec.describe Spree::Price, type: :model do
   end
 
   describe 'net_amount' do
-    let(:country) { create(:country, iso: "DE") }
+    let(:country) { Carmen::Country.coded('DE') }
     let(:zone) { create(:zone, countries: [country]) }
     let!(:tax_rate) { create(:tax_rate, included_in_price: true, zone: zone, tax_categories: [variant.tax_category]) }
 
