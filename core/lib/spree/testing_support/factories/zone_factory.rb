@@ -15,6 +15,8 @@ FactoryBot.define do
   factory :zone, class: 'Spree::Zone' do
     sequence(:name) { |i| "Zone #{i}" }
 
+    # If this is called multiple times it should actually return different
+    # countries!!
     trait :with_country do
       countries { [Carmen::Country.coded('US')] }
     end
