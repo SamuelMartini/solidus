@@ -23,7 +23,7 @@ RSpec.describe 'stock location factory' do
   end
 
   describe 'stock location for a country without subregions' do
-    let(:country) { create(:country, iso: 'HK') }
+    let(:country) { Carmen::Country.coded('HK') }
     it 'succeeds' do
       expect(
         create(:stock_location, country: country)
