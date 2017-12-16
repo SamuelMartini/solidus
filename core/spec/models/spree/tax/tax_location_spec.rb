@@ -6,20 +6,20 @@ RSpec.describe Spree::Tax::TaxLocation do
 
   subject { described_class.new }
 
-  it { is_expected.to respond_to(:state) }
-  it { is_expected.to respond_to(:country) }
+  it { is_expected.to respond_to(:state_iso) }
+  it { is_expected.to respond_to(:country_iso) }
 
   describe "default values" do
-    it "has a nil state and country id" do
-      expect(subject.state).to eq(nil)
-      expect(subject.country).to eq(nil)
+    it "has a nil state and country iso" do
+      expect(subject.state_iso).to eq(nil)
+      expect(subject.country_iso).to eq(nil)
     end
   end
 
   describe '#==' do
     let(:other) { described_class.new(state: nil, country: nil) }
 
-    it 'compares the values of state id and country id and does not care about object identity' do
+    it 'compares the values of state iso and country iso and does not care about object identity' do
       expect(subject).to eq(other)
     end
   end
@@ -30,14 +30,14 @@ RSpec.describe Spree::Tax::TaxLocation do
     context 'with a country object' do
       let(:args) { { country: country } }
 
-      it "will yield a location with that country's id" do
+      it "will yield a location with that country" do
         expect(subject.country).to eq(country)
       end
     end
   end
 
   describe "#country" do
-    let(:country) { create(:country) }
+    let(:country) { Carmen::Country.coded('US') }
     subject { described_class.new(args).country }
 
     context 'with a country object' do

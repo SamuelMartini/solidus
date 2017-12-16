@@ -4,21 +4,21 @@ RSpec.describe Spree::TaxRate, type: :model do
   it { is_expected.to respond_to(:shipping_rate_taxes) }
 
   context '.for_address' do
-    let(:germany) { create(:country, iso: "DE") }
+    let(:germany) { Carmen::Country.coded('DE')  }
     let(:germany_zone) { create(:zone, countries: [germany]) }
     let!(:german_tax) { create(:tax_rate, zone: germany_zone) }
-    let(:france) { create(:country, iso: "FR") }
+    let(:france) { Carmen::Country.coded('FR') }
     let(:france_zone) { create(:zone, countries: [france]) }
     let!(:french_tax) { create(:tax_rate, zone: france_zone) }
     let(:eu_zone) { create(:zone, countries: [germany, france]) }
     let!(:eu_tax) { create(:tax_rate, zone: eu_zone) }
-    let(:usa) { create(:country, iso: "US") }
+    let(:usa) { Carmen::Country.coded('US') }
     let(:us_zone) { create(:zone, countries: [usa]) }
     let!(:us_tax) { create(:tax_rate, zone: us_zone) }
-    let(:new_york) { create(:state, country: usa, state_code: "NY") }
+    let(:new_york) { usa.subregions.find { |s| s.code == 'NY' } }
     let(:new_york_zone) { create(:zone, states: [new_york]) }
     let!(:new_york_tax) { create(:tax_rate, zone: new_york_zone) }
-    let(:alabama) { create(:state, country: usa, state_code: "AL") }
+    let(:alabama) { usa.subregions.find { |s| s.code == 'AL' } }
     let(:alabama_zone) { create(:zone, states: [alabama]) }
     let!(:alabama_tax) { create(:tax_rate, zone: alabama_zone) }
 
@@ -62,12 +62,12 @@ RSpec.describe Spree::TaxRate, type: :model do
     end
 
     context "when no rate zones match the tax zone" do
-      let(:rate_zone) { create(:zone, :with_country) }
+      let(:rate_zone) { create(:zone, countries: [Carmen::Country.coded('US')]) } # :with_country) }
       let!(:rate) { create :tax_rate, zone: rate_zone }
 
       context "when there is no default tax zone" do
         context "and the zone has no shared members with the rate zone" do
-          let(:zone) { create(:zone, :with_country) }
+          let(:zone) { create(:zone, countries: [Carmen::Country.coded('CA')]) } # :with_country) }
 
           it "should return an empty array" do
             expect(subject).to eq([])
@@ -92,8 +92,9 @@ RSpec.describe Spree::TaxRate, type: :model do
         end
 
         context "when the tax_zone is contained within a rate zone" do
-          let(:country1) { create :country }
-          let(:country2) { create :country }
+          # TODO: Same country, different IDs it was create(:country) twice
+          let(:country1) { Carmen::Country.coded('US') }
+          let(:country2) { Carmen::Country.coded('CA') }
           let(:rate_zone) { create(:zone, countries: [country1, country2]) }
           let(:zone) { create(:zone, countries: [country1]) }
 
@@ -125,7 +126,7 @@ RSpec.describe Spree::TaxRate, type: :model do
         end
 
         context "when the zone is outside the default zone" do
-          let(:zone) { create(:zone, :with_country) }
+          let(:zone) { create(:zone, countries: [Carmen::Country.coded('CA')]) } # :with_country) }
 
           it { is_expected.to be_empty }
         end
