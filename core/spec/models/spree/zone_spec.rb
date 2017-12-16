@@ -102,8 +102,8 @@ RSpec.describe Spree::Zone, type: :model do
     context "when a zone member country is added to an existing zone consisting of state members" do
       it "should remove existing state members" do
         zone = create(:zone, name: 'foo', zone_members: [])
-        state = create(:state)
-        country = create(:country)
+        country = Carmen::Country.coded('US')
+        state = country.subregions.first
         zone.members.create(zoneable: state)
         country_member = zone.members.create(zoneable: country)
         zone.save
@@ -113,10 +113,11 @@ RSpec.describe Spree::Zone, type: :model do
   end
 
   context "#kind" do
+    let(:country) { Carmen::Country.coded('US') }
     context "when the zone consists of country zone members" do
       before do
         @zone = create(:zone, name: 'country', zone_members: [])
-        @zone.members.create(zoneable: create(:country))
+        @zone.members.create(zoneable: country)
       end
       it "should return the kind of zone member" do
         expect(@zone.kind).to eq("country")
@@ -126,7 +127,7 @@ RSpec.describe Spree::Zone, type: :model do
     context "when the zone consists of state zone members" do
       before do
         @zone = create(:zone, name: 'state', zone_members: [])
-        @zone.members.create(zoneable: create(:state))
+        @zone.members.create(zoneable: country.subregions.first)
       end
       it "should return the kind of zone member" do
         expect(@zone.kind).to eq("state")
@@ -135,7 +136,7 @@ RSpec.describe Spree::Zone, type: :model do
   end
 
   context "state and country associations" do
-    let!(:country) { create(:country) }
+    let!(:country) { Carmen::Country.coded('US') }
 
     context "has countries associated" do
       let!(:zone) do
@@ -148,7 +149,7 @@ RSpec.describe Spree::Zone, type: :model do
     end
 
     context "has states associated" do
-      let!(:state) { create(:state, country: country) }
+      let!(:state) { country.subregions.first }
       let!(:zone) do
         create(:zone, states: [state])
       end
@@ -160,9 +161,9 @@ RSpec.describe Spree::Zone, type: :model do
   end
 
   context ".with_shared_members" do
-    let!(:country)  { create(:country) }
-    let!(:country2) { create(:country, name: 'OtherCountry') }
-    let!(:country3) { create(:country, name: 'TaxCountry') }
+    let!(:country)  { Carmen::Country.coded('US') }
+    let!(:country2) { Carmen::Country.coded('DE') } # check that this needed states
+    let!(:country3) { Carmen::Country.coded('IT') } # check that this needed states
 
     subject(:zones_with_shared_members) { Spree::Zone.with_shared_members(zone) }
 
@@ -213,9 +214,9 @@ RSpec.describe Spree::Zone, type: :model do
     end
 
     context "finding potential matches for a state zone" do
-      let!(:state)  { create(:state, country: country) }
-      let!(:state2) { create(:state, country: country2, name: 'OtherState') }
-      let!(:state3) { create(:state, country: country2, name: 'State') }
+      let!(:state)  { country.subregions.first }
+      let!(:state2) { country2.subregions.first }
+      let!(:state3) { country2.subregions.last }
       let!(:zone) do
         create(:zone).tap do |z|
           z.members.create(zoneable: state)
