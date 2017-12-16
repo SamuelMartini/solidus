@@ -86,7 +86,7 @@ RSpec.describe Spree::Store, type: :model do
     end
 
     context "when there is a cart_tax_country_iso set" do
-      let(:country) { create(:country, iso: "DE") }
+      let(:country) { Carmen::Country.coded('DE') }
       let(:cart_tax_country_iso) { country.iso }
 
       it "responds with a default_cart_tax_location with that country" do
