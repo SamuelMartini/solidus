@@ -62,12 +62,12 @@ RSpec.describe Spree::TaxRate, type: :model do
     end
 
     context "when no rate zones match the tax zone" do
-      let(:rate_zone) { create(:zone, :with_country) }
+      let(:rate_zone) { create(:zone, countries: [Carmen::Country.coded('US')]) } # :with_country) }
       let!(:rate) { create :tax_rate, zone: rate_zone }
 
       context "when there is no default tax zone" do
         context "and the zone has no shared members with the rate zone" do
-          let(:zone) { create(:zone, :with_country) }
+          let(:zone) { create(:zone, countries: [Carmen::Country.coded('CA')]) } # :with_country) }
 
           it "should return an empty array" do
             expect(subject).to eq([])
@@ -126,7 +126,7 @@ RSpec.describe Spree::TaxRate, type: :model do
         end
 
         context "when the zone is outside the default zone" do
-          let(:zone) { create(:zone, :with_country) }
+          let(:zone) { create(:zone, countries: [Carmen::Country.coded('CA')]) } # :with_country) }
 
           it { is_expected.to be_empty }
         end
