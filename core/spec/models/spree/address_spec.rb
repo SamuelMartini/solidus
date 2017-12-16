@@ -16,13 +16,13 @@ RSpec.describe Spree::Address, type: :model do
   end
 
   context "validation" do
-    let(:country) { create :country, states_required: true }
-    let(:state) { Spree::State.new name: 'maryland', abbr: 'md', country: country }
+    let(:country) { Carmen::Country.coded('US') }
+    let(:state) { country.subregions.find { |s| s.code == 'MD' } }
     let(:address) { build(:address, country: country) }
 
-    before do
-      allow(country.states).to receive_messages with_name_or_abbr: [state]
-    end
+    # before do
+    #   allow(country.states).to receive_messages with_name_or_abbr: [state]
+    # end
 
     context 'address does not require state' do
       before do
@@ -72,7 +72,10 @@ RSpec.describe Spree::Address, type: :model do
         context 'when the country requires states' do
           it 'is invalid' do
             address.state = state
-            address.country = Spree::Country.new(states_required: true)
+            # this is weird, the factory method creates a country (US) but without
+            # any states... so we need to use a country that doesnt actually contain
+            # maryland
+            address.country = Carmen::Country.coded('CA') # Spree::Country.new(states_required: true)
             address.valid?
             expect(address.errors["state"]).to eq(['is invalid', 'does not match the country'])
           end
@@ -81,7 +84,7 @@ RSpec.describe Spree::Address, type: :model do
         context 'when the country does not require states' do
           it 'is invalid' do
             address.state = state
-            address.country = Spree::Country.new(states_required: false)
+            address.country = Carmen::Country.coded('AI') # Spree::Country.new(states_required: false)
             address.valid?
             expect(address.errors["state"]).to eq(['does not match the country'])
           end
@@ -91,7 +94,10 @@ RSpec.describe Spree::Address, type: :model do
       it "both state and state_name are entered but country does not contain the state" do
         address.state = state
         address.state_name = 'maryland'
-        address.country = create :country, states_required: :true
+        # this is weird, the factory method creates a country (US) but without
+        # any states... so we need to use a country that doesnt actually contain
+        # maryland
+        address.country = Carmen::Country.coded('CA') # create :country, states_required: :true,
         expect(address).to be_valid
         expect(address.state_id).to be_nil
       end
@@ -139,7 +145,7 @@ RSpec.describe Spree::Address, type: :model do
 
   context ".build_default" do
     context "no user given" do
-      let!(:default_country) { create(:country) }
+      let!(:default_country) { Carmen::Country.coded('US') }
 
       context 'has a default country' do
         before do
@@ -164,7 +170,7 @@ RSpec.describe Spree::Address, type: :model do
   context '.factory' do
     context 'with attributes that use setters defined in Address' do
       let(:address_attributes) { attributes_for(:address, country_id: nil, country_iso: country.iso) }
-      let(:country) { create(:country, iso: 'ZW') }
+      let(:country) { Carmen::Country.coded('ZW') }
 
       it 'uses the setters' do
         expect(subject.factory(address_attributes).country_id).to eq(country.id)
@@ -288,14 +294,14 @@ RSpec.describe Spree::Address, type: :model do
 
   describe '.taxation_attributes' do
     context 'both taxation and non-taxation attributes are present ' do
-      let(:address) { Spree::Address.new firstname: 'Michael', lastname: 'Jackson', state_id: 1, country_id: 2, zipcode: '12345' }
+      let(:address) { Spree::Address.new firstname: 'Michael', lastname: 'Jackson', state_iso: 'BC', country_iso: 'CA', zipcode: '12345' }
 
       it 'removes the non-taxation attributes' do
         expect(address.taxation_attributes).not_to eq('firstname' => 'Michael', 'lastname' => 'Jackson')
       end
 
       it 'returns only the taxation attributes' do
-        expect(address.taxation_attributes).to eq('state_id' => 1, 'country_id' => 2, 'zipcode' => '12345')
+        expect(address.taxation_attributes).to eq('state_iso' => 'BC', 'country_iso' => 'CA', 'zipcode' => '12345')
       end
     end
 
@@ -303,18 +309,18 @@ RSpec.describe Spree::Address, type: :model do
       let(:address) { Spree::Address.new firstname: 'Michael', lastname: 'Jackson' }
 
       it 'returns a subset of the attributes with the correct keys and nil values' do
-        expect(address.taxation_attributes).to eq('state_id' => nil, 'country_id' => nil, 'zipcode' => nil)
+        expect(address.taxation_attributes).to eq('state_iso' => nil, 'country_iso' => nil, 'zipcode' => nil)
       end
     end
   end
 
   context '#country_iso=' do
-    let(:address) { build(:address, country_id: nil) }
-    let(:country) { create(:country, iso: 'ZW') }
+    let(:address) { build(:address) }
+    let(:country) { Carmen::Country.coded('ZW') }
 
     it 'sets the country to the country with the matching iso code' do
       address.country_iso = country.iso
-      expect(address.country_id).to eq(country.id)
+      expect(address.country).to eq(country)
     end
 
     it 'raises an exception if the iso is not found' do
@@ -353,13 +359,14 @@ RSpec.describe Spree::Address, type: :model do
     end
 
     context 'both name and abbr is present' do
-      let(:state) { Spree::State.new name: 'virginia', abbr: 'va' }
+      let(:state) { Carmen::Country.coded('US').subregions.find { |s| s.code == 'VA' } }
       let(:address) { Spree::Address.new state: state }
       specify { expect(address.state_text).to eq('va') }
     end
 
+    # TODO this case should never happen?
     context 'only name is present' do
-      let(:state) { Spree::State.new name: 'virginia', abbr: nil }
+      let(:state) { Carmen::Country.coded('US').subregions.find { |s| s.code == 'VA' } }
       let(:address) { Spree::Address.new state: state }
       specify { expect(address.state_text).to eq('virginia') }
     end
