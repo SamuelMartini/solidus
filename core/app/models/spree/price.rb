@@ -35,7 +35,7 @@ module Spree
     end
 
     def country=(country)
-      country_iso = country.code
+      country_iso = country.try(:code)
     end
 
     def country
