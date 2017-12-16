@@ -47,7 +47,7 @@ RSpec.describe Spree::AppConfiguration, type: :model do
 
   it 'has a default admin VAT location with nil values by default' do
     expect(prefs.admin_vat_location).to eq(Spree::Tax::TaxLocation.new)
-    expect(prefs.admin_vat_location.state_id).to eq(nil)
-    expect(prefs.admin_vat_location.country_id).to eq(nil)
+    expect(prefs.admin_vat_location.state).to eq(nil) # TODO: make iso code?
+    expect(prefs.admin_vat_location.country).to eq(nil) # TODO: make iso code?
   end
 end
