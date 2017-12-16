@@ -2,6 +2,10 @@ Carmen::Region.class_eval do
   def to_hash
     { type: type, code: code, name: name, subregions: subregions, parent: parent.code }
   end
+
+  def country
+    parent
+  end
 end
 
 Carmen::Country.class_eval do
