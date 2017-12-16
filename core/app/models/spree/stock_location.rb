@@ -12,9 +12,6 @@ module Spree
     has_many :user_stock_locations, dependent: :delete_all
     has_many :users, through: :user_stock_locations
 
-    belongs_to :state, class_name: 'Spree::State'
-    belongs_to :country, class_name: 'Spree::Country'
-
     has_many :shipping_method_stock_locations, dependent: :destroy
     has_many :shipping_methods, through: :shipping_method_stock_locations
 
@@ -27,8 +24,26 @@ module Spree
     after_create :create_stock_items, if: "self.propagate_all_variants?"
     after_save :ensure_one_default
 
+    def country
+      Carmen::Country.coded(country_iso)
+    end
+
+    def state
+      if country_iso
+        Carmen::Country.coded(country_iso).subregions.find { |s| s.code == state_iso }
+      end
+    end
+
+    def state=(carmen)
+      self[:state_iso] = carmen.try(:code)
+    end
+
+    def country=(carmen)
+      self[:country_iso] = carmen.try(:code)
+    end
+
     def state_text
-      state.try(:abbr) || state.try(:name) || state_name
+      state.try(:abbr) || state.try(:name) || state_iso || state_name
     end
 
     # Wrapper for creating a new stock item respecting the backorderable config
