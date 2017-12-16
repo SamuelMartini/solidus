@@ -10,12 +10,12 @@ end
 
 Carmen::Country.class_eval do
   def iso_code
-    Spree::Deprecation.warn('Use #code instead.')
+    # Spree::Deprecation.warn('Use #code instead.')
     code
   end
 
   def iso
-    Spree::Deprecation.warn('Use #code instead.')
+    # Spree::Deprecation.warn('Use #code instead.')
     code
   end
 end
