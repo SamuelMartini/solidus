@@ -17,7 +17,7 @@ module Spree
     alias_attribute :last_name, :lastname
 
     DB_ONLY_ATTRS = %w(id updated_at created_at)
-    TAXATION_ATTRS = %w(state_id country_id zipcode)
+    TAXATION_ATTRS = %w(state_iso country_iso zipcode)
 
     self.whitelisted_ransackable_attributes = %w[firstname lastname]
 
@@ -26,19 +26,11 @@ module Spree
     end
 
     def state=(carmen)
-      if carmen.nil?
-        self[:state_iso] = nil
-      else
-        self[:state_iso] = carmen.code
-      end
+      self[:state_iso] = carmen.try(:code)
     end
 
     def country=(carmen)
-      if carmen.nil?
-        self[:country_iso] = nil
-      else
-        self[:country_iso] = carmen.code
-      end
+      self[:country_iso] = carmen.try(:code)
     end
 
     def country
@@ -46,11 +38,18 @@ module Spree
     end
 
     def state
-      Carmen::Country.coded(country_iso).subregions.find { |s| s.code == state_iso }
+      if country_iso
+        Carmen::Country.coded(country_iso).subregions.find { |s| s.code == state_iso }
+      end
     end
 
     def self.build_default
-      new(country: Spree::Country.default)
+      country = Carmen::Country.coded(Spree::Config.default_country_iso)
+      if country
+        new(country_iso: country.code)
+      else
+        raise ActiveRecord::RecordNotFound
+      end
     end
 
     # @return [Address] an equal address already in the database or a newly created one
@@ -110,7 +109,7 @@ module Spree
 
     # @return [String] a string representation of this state
     def state_text
-      state.try(:abbr) || state.try(:name) || state_name
+      state.try(:abbr) || state.try(:name) || state_iso || state_name
     end
 
     def to_s
@@ -187,13 +186,14 @@ module Spree
     # @param iso [String] 2 letter Country ISO
     # @return [Country] setter that sets self.country to the Country with a matching 2 letter iso
     # @raise [ActiveRecord::RecordNotFound] if country with the iso doesn't exist
-    # def country_iso=(iso)
-    #   self.country = Spree::Country.find_by!(iso: iso)
-    # end
-
-    # def country_iso
-    #   country && country.iso
-    # end
+    def country_iso=(iso)
+      country = Carmen::Country.coded(iso)
+      if country
+        self[:country_iso] = country.code
+      else
+        raise ActiveRecord::RecordNotFound, "Couldn't find Spree::Country"
+      end
+    end
 
     private
 
@@ -202,38 +202,33 @@ module Spree
       # or when disabled by preference
       return if country.blank? || !Spree::Config[:address_requires_state]
       # return unless country.states_required
+      return unless country.subregions? # If it doesn't have states, relax
 
-      # ensure associated state belongs to country
-      if state.present?
-        if state.parent == country
+      if state_iso.present? # they tried to set a state_iso
+        if state # We can build the Carmen region via its country code
           self.state_name = nil # not required as we have a valid state and country combo
-        elsif state_name.present?
-          self.state = nil
+        elsif state_name.nil? # it isn't part of this country
+          errors.add(:state, :invalid)
+        end
+      elsif state_name.present?
+        matching_states = country.subregions.find_all do |s|
+          (s.name.downcase == state_name.downcase) ||
+            (s.code.downcase == state_name.downcase)
+        end
+        if matching_states.size == 1
+          self.state = matching_states.first
+          self.state_name = nil
         else
           errors.add(:state, :invalid)
         end
+      else
+        errors.add :state, :blank if state.blank? && state_name.blank?
       end
-
-      # ensure state_name belongs to country without states, or that it matches a predefined state name/abbr
-      if state_name.present?
-        if country.states.present?
-          states = country.states.with_name_or_abbr(state_name)
-
-          if states.size == 1
-            self.state = states.first
-            self.state_name = nil
-          else
-            errors.add(:state, :invalid)
-          end
-        end
-      end
-
-      # ensure at least one state field is populated
-      errors.add :state, :blank if state.blank? && state_name.blank?
     end
 
     def validate_state_matches_country
-      if state && state.parent != country
+      return if !Spree::Config[:address_requires_state]
+      if (state.nil? && !state_name.present?) || (state && state.parent != country)
         errors.add(:state, :does_not_match_country)
       end
     end
