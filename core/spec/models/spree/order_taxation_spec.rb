@@ -4,7 +4,7 @@ RSpec.describe Spree::OrderTaxation do
   let(:shipping_address) { FactoryBot.create(:address, state: new_york) }
   let(:order) { FactoryBot.create(:order, ship_address: shipping_address, state: "delivery") }
 
-  let(:new_york) { FactoryBot.create(:state, state_code: "NY") }
+  let(:new_york) { Carmen::Country.coded('US').subregions.find { |s| s.code == 'NY' }  }
   let(:new_york_zone) { FactoryBot.create(:zone, states: [new_york]) }
 
   let(:books_category) { FactoryBot.create(:tax_category, name: "Books") }
