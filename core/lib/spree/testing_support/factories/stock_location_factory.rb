@@ -12,11 +12,11 @@ FactoryBot.define do
     active true
     backorderable_default true
 
-    country  { |stock_location| Spree::Country.first || stock_location.association(:country) }
-    state do |stock_location|
-      carmen_country = Carmen::Country.coded(stock_location.country.iso)
+    country_iso { |stock_location| Carmen::Country.all.first.code }
+    state_iso do |stock_location|
+      carmen_country = Carmen::Country.coded(stock_location.country_iso)
       if carmen_country.subregions?
-        stock_location.country.states.first || stock_location.association(:state, country: stock_location.country)
+        stock_location.country.subregions.first.code
       end
     end
 
