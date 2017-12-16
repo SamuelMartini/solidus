@@ -6,6 +6,10 @@ Carmen::Region.class_eval do
   def country
     parent
   end
+
+  def abbr
+    code
+  end
 end
 
 Carmen::Country.class_eval do
