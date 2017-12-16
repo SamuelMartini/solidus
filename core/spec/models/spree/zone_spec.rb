@@ -46,8 +46,8 @@ RSpec.describe Spree::Zone, type: :model do
   end
 
   context "#country_list" do
-    let(:state) { create(:state) }
-    let(:country) { state.country }
+    let(:country) { Carmen::Country.coded('US') }
+    let(:state) { country.subregions.first }
 
     context "when zone consists of countries" do
       let(:country_zone) { create(:zone, name: 'CountryZone') }
@@ -68,15 +68,15 @@ RSpec.describe Spree::Zone, type: :model do
 
       it 'should return a list of countries' do
         Spree::Deprecation.silence do
-          expect(state_zone.country_list).to eq([state.country])
+          expect(state_zone.country_list).to eq([state.parent])
         end
       end
     end
   end
 
   context "#include?" do
-    let(:state) { create(:state) }
-    let(:country) { state.country }
+    let(:country) { Carmen::Country.coded('US') }
+    let(:state) { country.subregions.first }
     let(:address) { create(:address, state: state) }
 
     context "when zone is country type" do
