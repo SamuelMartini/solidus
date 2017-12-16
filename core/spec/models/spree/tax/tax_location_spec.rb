@@ -37,7 +37,7 @@ RSpec.describe Spree::Tax::TaxLocation do
   end
 
   describe "#country" do
-    let(:country) { create(:country) }
+    let(:country) { Carmen::Country.coded('US') }
     subject { described_class.new(args).country }
 
     context 'with a country object' do
