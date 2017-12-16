@@ -6,10 +6,7 @@ module Spree
   class Address < Spree::Base
     extend ActiveModel::ForbiddenAttributesProtection
 
-    belongs_to :country, class_name: "Spree::Country"
-    belongs_to :state, class_name: "Spree::State"
-
-    validates :firstname, :address1, :city, :country_id, presence: true
+    validates :firstname, :address1, :city, :country_iso, presence: true
     validates :zipcode, presence: true, if: :require_zipcode?
     validates :phone, presence: true, if: :require_phone?
 
@@ -26,6 +23,30 @@ module Spree
 
     scope :with_values, ->(attributes) do
       where(value_attributes(attributes))
+    end
+
+    def state=(carmen)
+      if carmen.nil?
+        self[:state_iso] = nil
+      else
+        self[:state_iso] = carmen.code
+      end
+    end
+
+    def country=(carmen)
+      if carmen.nil?
+        self[:country_iso] = nil
+      else
+        self[:country_iso] = carmen.code
+      end
+    end
+
+    def country
+      Carmen::Country.coded(country_iso)
+    end
+
+    def state
+      Carmen::Country.coded(country_iso).subregions.find { |s| s.code == state_iso }
     end
 
     def self.build_default
@@ -166,13 +187,13 @@ module Spree
     # @param iso [String] 2 letter Country ISO
     # @return [Country] setter that sets self.country to the Country with a matching 2 letter iso
     # @raise [ActiveRecord::RecordNotFound] if country with the iso doesn't exist
-    def country_iso=(iso)
-      self.country = Spree::Country.find_by!(iso: iso)
-    end
+    # def country_iso=(iso)
+    #   self.country = Spree::Country.find_by!(iso: iso)
+    # end
 
-    def country_iso
-      country && country.iso
-    end
+    # def country_iso
+    #   country && country.iso
+    # end
 
     private
 
@@ -180,11 +201,11 @@ module Spree
       # Skip state validation without country (also required)
       # or when disabled by preference
       return if country.blank? || !Spree::Config[:address_requires_state]
-      return unless country.states_required
+      # return unless country.states_required
 
       # ensure associated state belongs to country
       if state.present?
-        if state.country == country
+        if state.parent == country
           self.state_name = nil # not required as we have a valid state and country combo
         elsif state_name.present?
           self.state = nil
@@ -212,7 +233,7 @@ module Spree
     end
 
     def validate_state_matches_country
-      if state && state.country != country
+      if state && state.parent != country
         errors.add(:state, :does_not_match_country)
       end
     end

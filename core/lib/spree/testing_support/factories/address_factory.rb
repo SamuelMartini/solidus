@@ -20,15 +20,18 @@ FactoryBot.define do
     alternative_phone '555-555-0199'
 
     state do |address|
-      Spree::State.joins(:country).where('spree_countries.iso = (?)', country_iso_code).find_by(abbr: state_code) ||
-        address.association(:state, country_iso: country_iso_code, state_code: state_code)
+      Carmen::Country.coded(country_iso_code).subregions.find { |s| s.code == state_code } ||
+        Carmen::Country.coded(country_iso_code).subregions.first
+      # Spree::State.joins(:country).where('spree_countries.iso = (?)', country_iso_code).find_by(abbr: state_code) ||
+      #   address.association(:state, country_iso: country_iso_code, state_code: state_code)
     end
 
     country do |address|
       if address.state
-        address.state.country
+        address.state.parent
       else
-        address.association(:country, iso: country_iso_code)
+        Carmen::Country.coded(country_iso_code)
+        # address.association(:country, iso: country_iso_code)
       end
     end
   end
