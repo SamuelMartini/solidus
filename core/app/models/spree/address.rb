@@ -17,7 +17,7 @@ module Spree
     alias_attribute :last_name, :lastname
 
     DB_ONLY_ATTRS = %w(id updated_at created_at)
-    TAXATION_ATTRS = %w(state_id country_id zipcode)
+    TAXATION_ATTRS = %w(state_iso country_iso zipcode)
 
     self.whitelisted_ransackable_attributes = %w[firstname lastname]
 
@@ -46,11 +46,18 @@ module Spree
     end
 
     def state
-      Carmen::Country.coded(country_iso).subregions.find { |s| s.code == state_iso }
+      if country_iso
+        Carmen::Country.coded(country_iso).subregions.find { |s| s.code == state_iso }
+      end
     end
 
     def self.build_default
-      new(country: Spree::Country.default)
+      country = Carmen::Country.coded(Spree::Config.default_country_iso)
+      if country
+        new(country_iso: country.code)
+      else
+        raise ActiveRecord::RecordNotFound
+      end
     end
 
     # @return [Address] an equal address already in the database or a newly created one
@@ -187,9 +194,14 @@ module Spree
     # @param iso [String] 2 letter Country ISO
     # @return [Country] setter that sets self.country to the Country with a matching 2 letter iso
     # @raise [ActiveRecord::RecordNotFound] if country with the iso doesn't exist
-    # def country_iso=(iso)
-    #   self.country = Spree::Country.find_by!(iso: iso)
-    # end
+    def country_iso=(iso)
+      country = Carmen::Country.coded(iso)
+      if country
+        self[:country_iso] = country.code
+      else
+        raise ActiveRecord::RecordNotFound, "Couldn't find Spree::Country"
+      end
+    end
 
     # def country_iso
     #   country && country.iso
@@ -202,6 +214,7 @@ module Spree
       # or when disabled by preference
       return if country.blank? || !Spree::Config[:address_requires_state]
       # return unless country.states_required
+      return unless country.subregions?
 
       # ensure associated state belongs to country
       if state.present?
@@ -216,8 +229,10 @@ module Spree
 
       # ensure state_name belongs to country without states, or that it matches a predefined state name/abbr
       if state_name.present?
-        if country.states.present?
-          states = country.states.with_name_or_abbr(state_name)
+        if country.subregions?
+        # if country.states.present?
+          # states = country.states.with_name_or_abbr(state_name)
+          states = country.subregions.find_all { |s| s.name.downcase == state_name.downcase || s.code.downcase == state_name.downcase }
 
           if states.size == 1
             self.state = states.first
