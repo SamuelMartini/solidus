@@ -51,9 +51,9 @@ RSpec.describe "Taxation system integration tests" do
   let(:shipping_rate) { shipment.shipping_rates.first }
 
   context 'selling from germany' do
-    let(:germany) { create :country, iso: "DE" }
+    let(:germany) { Carmen::Country.coded('DE') }
     let!(:germany_zone) { create :zone, countries: [germany] }
-    let(:romania) { create(:country, iso: "RO") }
+    let(:romania) { Carmen::Country.coded('RO') }
     let(:romania_zone) { create(:zone, countries: [romania] ) }
     let(:eu_zone) { create(:zone, countries: [romania, germany]) }
     let(:world_zone) { create(:zone, :with_country) }
@@ -552,8 +552,8 @@ RSpec.describe "Taxation system integration tests" do
 
   # Choosing New York here because in the US, states matter
   context 'selling from new york' do
-    let(:new_york) { create(:state, state_code: "NY") }
-    let(:united_states) { new_york.country }
+    let(:new_york) { Carmen::Country.coded('US').subregions.find { |s| s.code == 'NY' } }
+    let(:united_states) { new_york.parent }
     let(:new_york_zone) { create(:zone, states: [new_york]) }
     let(:united_states_zone) { create(:zone, countries: [united_states]) }
     # Creating two rates for books here to
