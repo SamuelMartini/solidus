@@ -7,7 +7,6 @@ module Spree
           can [:display, :admin], Spree::TaxRate
           can [:display, :admin], Spree::Zone
           can [:display, :admin], Spree::Country
-          can [:display, :admin], Spree::State
           can [:display, :admin], Spree::PaymentMethod
           can [:display, :admin], Spree::Taxonomy
           can [:display, :admin], Spree::ShippingMethod
