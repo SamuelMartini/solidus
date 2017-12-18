@@ -6,7 +6,7 @@ module Spree
     # @attr_reader [Integer] country_id the ID of a Spree::Country object
     # @attr_reader [Integer] state_id the ID of a Spree::State object
     class TaxLocation
-      attr_reader :country, :state
+      attr_reader :country_iso, :state_iso
 
       # Create a new TaxLocation object
       #
@@ -17,21 +17,21 @@ module Spree
       #
       # @return [Spree::Tax::TaxLocation] a Spree::Tax::TaxLocation object
       def initialize(country: nil, state: nil)
-        @country = country && country
-        @state = state && state
+        @country_iso = country && country.code
+        @state_iso = state && state.code
       end
 
       def ==(other)
-        state == other.state && country == other.country
+        state_iso == other.state_iso && country_iso == other.country_iso
       end
 
       # TODO: If we use the code here, maybe do that
-      # def country
-      #   Spree::Country.find_by(id: country_id)
-      # end
+      def country
+        Carmen::Country.coded(country_iso)
+      end
 
       def empty?
-        country.nil? && state.nil?
+        country_iso.nil? && state_iso.nil?
       end
     end
   end
