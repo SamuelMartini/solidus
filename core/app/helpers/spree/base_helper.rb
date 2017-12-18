@@ -110,13 +110,19 @@ module Spree
       if checkout_zone && checkout_zone.kind == 'country'
         countries = checkout_zone.country_list
       else
-        countries = Country.all
+        countries = Carmen::Country.all
       end
 
-      countries.collect do |country|
-        country.name = t(country.iso, scope: 'spree.country_names', default: country.name)
-        country
-      end.sort_by { |c| c.name.parameterize }
+      # TODO: We should use Carmen for this? We can't be setting the name here.
+      # Either change the locale, or the views need to handle this (display a
+      # different country name).
+      # countries.collect do |country|
+      #   # TODO: Not a fan of what is going on here...
+      #   # This needs to be changed to use the localized version
+      #   # We should just use Carmen for this
+      #   country.name = t(country.iso, scope: 'spree.country_names', default: country.name)
+      #   country
+      # end.sort_by { |c| c.name.parameterize }
     end
 
     def seo_url(taxon)

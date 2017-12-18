@@ -6,11 +6,7 @@ RSpec.describe Spree::BaseHelper, type: :helper do
   let(:current_store){ create :store }
 
   context "available_countries" do
-    let(:country) { create(:country) }
-
-    before do
-      3.times { create(:country) }
-    end
+    let(:country) { Carmen::Country.coded('US') }
 
     context "with no checkout zone defined" do
       before do
@@ -18,7 +14,7 @@ RSpec.describe Spree::BaseHelper, type: :helper do
       end
 
       it "return complete list of countries" do
-        expect(available_countries.count).to eq(Spree::Country.count)
+        expect(available_countries.count).to eq(Carmen::Country.all.count)
       end
     end
 
@@ -38,13 +34,13 @@ RSpec.describe Spree::BaseHelper, type: :helper do
       context "checkout zone is of type state" do
         before do
           state_zone = create(:zone, name: "StateZone")
-          state = create(:state, country: country)
+          state = country.subregions.first
           state_zone.members.create(zoneable: state)
           Spree::Config[:checkout_zone] = state_zone.name
         end
 
         it "return complete list of countries" do
-          expect(available_countries.count).to eq(Spree::Country.count)
+          expect(available_countries.count).to eq(Carmen::Country.all.count)
         end
       end
     end
