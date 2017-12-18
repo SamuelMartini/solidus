@@ -125,9 +125,9 @@ module Spree
         :state_iso, :state_name, :state_text
       ]
 
-      @@country_attributes = [:id, :iso_name, :iso, :iso3, :name, :numcode]
+      @@country_attributes = [:iso_name, :iso, :iso3, :name, :numcode]
 
-      @@state_attributes = [:id, :name, :abbr, :country_id]
+      @@state_attributes = [:name, :abbr, :country_id]
 
       @@adjustment_attributes = [
         :id, :source_type, :source_id, :adjustable_type, :adjustable_id,
