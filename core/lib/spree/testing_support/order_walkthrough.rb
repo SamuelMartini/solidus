@@ -6,8 +6,8 @@ class OrderWalkthrough
   def up_to(state)
     # Need to create a valid zone too...
     @zone = FactoryBot.create(:zone)
-    @country = FactoryBot.create(:country)
-    @state = FactoryBot.create(:state, country: @country)
+    @country = Carmen::Country.coded('US')
+    @state = @country.subregions.first
 
     @zone.members << Spree::ZoneMember.create(zoneable: @country)
 
