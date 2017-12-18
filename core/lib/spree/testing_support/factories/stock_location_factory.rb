@@ -1,4 +1,3 @@
-require 'spree/testing_support/factories/country_factory'
 require 'spree/testing_support/factories/product_factory'
 
 FactoryBot.define do

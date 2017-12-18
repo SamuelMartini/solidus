@@ -1,5 +1,3 @@
-require 'spree/testing_support/factories/country_factory'
-
 FactoryBot.define do
   factory :address, class: 'Spree::Address' do
     transient do
