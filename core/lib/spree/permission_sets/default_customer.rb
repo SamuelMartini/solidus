@@ -2,7 +2,6 @@ module Spree
   module PermissionSets
     class DefaultCustomer < PermissionSets::Base
       def activate!
-        can :display, Country
         can :display, OptionType
         can :display, OptionValue
         can :create, Order
@@ -18,7 +17,6 @@ module Spree
         can :display, Property
         can :create, Spree.user_class
         can [:read, :update, :update_email], Spree.user_class, id: user.id
-        can :display, State
         can :display, StockItem, stock_location: { active: true }
         can :display, StockLocation, active: true
         can :display, Taxon
