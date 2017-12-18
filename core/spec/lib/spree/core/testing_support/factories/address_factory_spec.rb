@@ -52,8 +52,6 @@ RSpec.describe 'address factory' do
     it 'shares the same country and state objects' do
       expect(address1.country).to eq(address2.country)
       expect(address1.state).to eq(address2.state)
-      expect(Spree::Country.count).to eq(1)
-      expect(Spree::State.count).to eq(1)
     end
   end
 end
