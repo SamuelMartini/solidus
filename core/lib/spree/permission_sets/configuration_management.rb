@@ -6,7 +6,6 @@ module Spree
         can :manage, Spree::TaxCategory
         can :manage, Spree::TaxRate
         can :manage, Spree::Zone
-        can :manage, Spree::Country
         can :manage, Spree::PaymentMethod
         can :manage, Spree::Taxonomy
         can :manage, Spree::ShippingMethod
