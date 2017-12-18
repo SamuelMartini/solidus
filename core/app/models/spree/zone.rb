@@ -15,11 +15,10 @@ module Spree
       else
         spree_zone_members_table = Spree::ZoneMember.arel_table
         matching_state =
-          spree_zone_members_table[:zoneable_type].eq("Spree::State").
-          and(spree_zone_members_table[:zoneable].in(states))
+          spree_zone_members_table[:state_iso].in(states)
         matching_country =
-          spree_zone_members_table[:zoneable_type].eq("Spree::Country").
-          and(spree_zone_members_table[:zoneable].in(countries))
+          spree_zone_members_table[:state_iso].eq(nil).
+          and(spree_zone_members_table[:country_iso].in(countries))
         joins(:zone_members).where(matching_state.or(matching_country)).distinct
       end
     end
@@ -28,7 +27,7 @@ module Spree
       if address
         # TODO: check that the thing doing this can't just take single values
         # TODO: Give an array
-        with_member_ids([address.state], [address.country])
+        with_member_ids([address.state_iso], [address.country_iso])
       else
         none
       end
@@ -45,14 +44,14 @@ module Spree
     # will also be in the result set.
     def self.with_shared_members(zone)
       return none unless zone
-      countries = zone.countries
-      states = zone.states
+      countries = zone.countries.map(&:code)
+      states = zone.states.map(&:code)
       with_member_ids(states, countries).distinct
     end
 
     def kind
-      if members.any? && !members.any? { |member| member.try(:zoneable_type).nil? }
-        members.last.zoneable_type.demodulize.underscore
+      if members.any? # && !members.any? { |member| member.try(:zoneable_type).nil? }
+        members.last.state_iso.nil? ? 'country' : 'state'
       end
     end
 
@@ -64,13 +63,10 @@ module Spree
       return false unless address
 
       members.any? do |zone_member|
-        case zone_member.zoneable_type
-        when 'Spree::Country'
-          zone_member.zoneable == address.country
-        when 'Spree::State'
-          zone_member.zoneable == address.state
+        if zone_member.state_iso.nil?
+          zone_member.country == address.country
         else
-          false
+          zone_member.state == address.state
         end
       end
     end
@@ -96,7 +92,7 @@ module Spree
 
     def countries
       if kind == 'country'
-        members.pluck(:zoneable)
+        members.pluck(:country_iso).map { |t| Carmen::Country.coded(t) }
       else
         []
       end
@@ -104,7 +100,9 @@ module Spree
 
     def states
       if kind == 'state'
-        members.pluck(:zoneable)
+        members.pluck(:country_iso, :state_iso).map do |r|
+          Carmen::Country.coded(r[0]).subregions.find { |s| s.code == r[1] }
+        end
       else
         []
       end
@@ -122,7 +120,11 @@ module Spree
 
     def remove_defunct_members
       if zone_members.any?
-        zone_members.where('zoneable IS NULL OR zoneable_type != ?', "Spree::#{kind.classify}").destroy_all
+        if zone_members.last.state_iso.nil?
+          zone_members.where('state_iso IS NOT NULL').destroy_all
+        else
+          zone_members.where('state_iso IS NULL').destroy_all
+        end
       end
     end
 
@@ -130,7 +132,6 @@ module Spree
       zone_members.destroy_all
       objs.reject(&:blank?).map do |obj|
         member = Spree::ZoneMember.new
-        member.zoneable_type = type
         member.zoneable = obj
         members << member
       end

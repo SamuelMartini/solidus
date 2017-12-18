@@ -1,26 +1,34 @@
 module Spree
   class ZoneMember < Spree::Base
     belongs_to :zone, class_name: 'Spree::Zone', counter_cache: true, inverse_of: :zone_members
-    serialize :zoneable, Spree::SerializeCarmen
+    # Can I just do this?
+    # delegate :name, to: :zoneable, allow_nil: true
 
-    before_save :set_type
-
-    def set_type
-      type = (zoneable.class == Carmen::Country) ? 'Spree::Country' : 'Spree::State'
-      self[:zoneable_type] = type
+    # TODO: Do this?
+    def zoneable
+      state || country
     end
-    # def zoneable=(thing)
-    #   self[:zoneable] = thing
-    # end
 
-    # def initialize(zoneable:, zone: nil)
-    #   super
-    #   require 'pry'
-    #   binding.pry
-    #   type = (zoneable.class == Carmen::Country) ? 'Spree::Country' : 'Spree::State'
-    #   update_attributes(zoneable: zoneable, zoneable_type: type)
-    # end
+    def country
+      Carmen::Country.coded(country_iso)
+    end
 
-    delegate :name, to: :zoneable, allow_nil: true
+    def state
+      country.subregions.find { |s| s.code == state_iso }
+    end
+
+    def name
+      state.try(:name) || country.name
+    end
+
+    def zoneable=(place)
+      # Spree::Deprecation.warn('Initialize a zone with state: or country:')
+      if place.class == Carmen::Country
+        update_attributes(country_iso: place.code)
+      else
+        update_attributes(state_iso: place.code)
+        update_attributes(country_iso: place.parent.code)
+      end
+    end
   end
 end
