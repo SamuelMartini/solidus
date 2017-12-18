@@ -96,7 +96,7 @@ module Spree
 
     @@stock_location_attributes = [
       :name, :active, :address1, :address2, :city, :zipcode,
-      :backorderable_default, :state_name, :state_id, :country_id, :phone,
+      :backorderable_default, :state_name, :state_iso, :country_iso, :phone,
       :propagate_all_variants
     ]
 
