@@ -490,7 +490,7 @@ module Spree
     # @return [Spree::Tax::TaxLocation] default tax location
     def admin_vat_location
       @default_tax_location ||= Spree::Tax::TaxLocation.new(
-        country_iso: Carmen::Country.coded(admin_vat_country_iso).try(:code)
+        country: Carmen::Country.coded(admin_vat_country_iso)
       )
     end
   end
