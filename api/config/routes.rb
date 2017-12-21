@@ -70,7 +70,6 @@ Spree::Core::Engine.routes.draw do
     resources :orders, concerns: :order_routes
     resources :store_credit_categories, except: [:show]
 
-
     resources :zones
     resources :countries, only: [:index, :show] do
       resources :states, only: [:index, :show]
