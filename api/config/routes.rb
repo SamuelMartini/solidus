@@ -68,6 +68,8 @@ Spree::Core::Engine.routes.draw do
     get "/orders/current", to: "orders#current", as: "current_order"
 
     resources :orders, concerns: :order_routes
+    resources :store_credit_categories, except: [:show]
+
 
     resources :zones
     resources :countries, only: [:index, :show] do
