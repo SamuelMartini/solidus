@@ -12,7 +12,7 @@
   <% end %>
 
   <% if can?(:display, Spree::RefundReason) || can?(:display, Spree::ReimbursementType) ||
-     can?(:display, Spree::ReturnReason) || can?(:display, Spree::AdjustmentReason) %>
+      can?(:display, Spree::ReturnReason) || can?(:display, Spree::AdjustmentReason) || can?(:display, Spree::StoreCreditCategory) %>
     <%= tab :checkout, url: spree.admin_refund_reasons_path %>
   <% end %>
 

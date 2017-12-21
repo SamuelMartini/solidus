@@ -16,6 +16,9 @@
       <% if can?(:display, Spree::AdjustmentReason) %>
         <%= settings_tab_item plural_resource_name(Spree::AdjustmentReason), spree.admin_adjustment_reasons_path %>
       <% end %>
+      <% if can?(:display, Spree::StoreCreditCategory) %>
+        <%= settings_tab_item plural_resource_name(Spree::StoreCreditCategory), spree.admin_store_credit_categories_path %>
+      <% end %>
     </ul>
   </nav>
 <% end %>
