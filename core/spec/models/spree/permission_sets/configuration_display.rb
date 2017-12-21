@@ -25,6 +25,7 @@ RSpec.describe Spree::PermissionSets::ConfigurationDisplay do
     it { is_expected.to be_able_to(:display, Spree::RefundReason) }
     it { is_expected.to be_able_to(:display, Spree::ReimbursementType) }
     it { is_expected.to be_able_to(:display, Spree::ReturnReason) }
+    it { is_expected.to be_able_to(:display, Spree::StoreCreditCategory) }
     it { is_expected.to be_able_to(:admin, :general_settings) }
     it { is_expected.to be_able_to(:admin, Spree::TaxCategory) }
     it { is_expected.to be_able_to(:admin, Spree::TaxRate) }
@@ -40,6 +41,7 @@ RSpec.describe Spree::PermissionSets::ConfigurationDisplay do
     it { is_expected.to be_able_to(:admin, Spree::RefundReason) }
     it { is_expected.to be_able_to(:admin, Spree::ReimbursementType) }
     it { is_expected.to be_able_to(:admin, Spree::ReturnReason) }
+    it { is_expected.to be_able_to(:admin, Spree::StoreCreditCategory) }
   end
 
   context "when not activated" do
@@ -58,6 +60,7 @@ RSpec.describe Spree::PermissionSets::ConfigurationDisplay do
     it { is_expected.not_to be_able_to(:display, Spree::RefundReason) }
     it { is_expected.not_to be_able_to(:display, Spree::ReimbursementType) }
     it { is_expected.not_to be_able_to(:display, Spree::ReturnReason) }
+    it { is_expected.not_to be_able_to(:display, Spree::StoreCreditCategory) }
     it { is_expected.not_to be_able_to(:admin, :general_settings) }
     it { is_expected.not_to be_able_to(:admin, Spree::TaxCategory) }
     it { is_expected.not_to be_able_to(:admin, Spree::TaxRate) }
@@ -73,5 +76,6 @@ RSpec.describe Spree::PermissionSets::ConfigurationDisplay do
     it { is_expected.not_to be_able_to(:admin, Spree::RefundReason) }
     it { is_expected.not_to be_able_to(:admin, Spree::ReimbursementType) }
     it { is_expected.not_to be_able_to(:admin, Spree::ReturnReason) }
+    it { is_expected.not_to be_able_to(:admin, Spree::StoreCreditCategory) }
   end
 end

@@ -17,6 +17,7 @@ module Spree
         can :manage, Spree::RefundReason
         can :manage, Spree::ReimbursementType
         can :manage, Spree::ReturnReason
+        can :manage, Spree::StoreCreditCategory
       end
     end
   end

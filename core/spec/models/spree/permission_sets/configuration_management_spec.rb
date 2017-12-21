@@ -25,6 +25,7 @@ RSpec.describe Spree::PermissionSets::ConfigurationManagement do
     it { is_expected.to be_able_to(:manage, Spree::RefundReason) }
     it { is_expected.to be_able_to(:manage, Spree::ReimbursementType) }
     it { is_expected.to be_able_to(:manage, Spree::ReturnReason) }
+    it { is_expected.to be_able_to(:manage, Spree::StoreCreditCategory) }
   end
 
   context "when not activated" do
@@ -43,5 +44,6 @@ RSpec.describe Spree::PermissionSets::ConfigurationManagement do
     it { is_expected.not_to be_able_to(:manage, Spree::RefundReason) }
     it { is_expected.not_to be_able_to(:manage, Spree::ReimbursementType) }
     it { is_expected.not_to be_able_to(:manage, Spree::ReturnReason) }
+    it { is_expected.not_to be_able_to(:manage, Spree::StoreCreditCategory) }
   end
 end
