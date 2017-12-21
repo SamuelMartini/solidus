@@ -1,0 +1,11 @@
+<%= render partial: 'spree/shared/error_messages', locals: { target: @store_credit_category } %>
+
+<%= form_for [:admin, @store_credit_category] do |f| %>
+  <fieldset data-hook='new_property'>
+    <legend align='center'><%= t('spree.new_store_credit_category') %></legend>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div class='filter-actions'>
+      <%= render partial: 'spree/admin/shared/new_resource_links' %>
+    </div>
+  </fieldset>
+<% end %>

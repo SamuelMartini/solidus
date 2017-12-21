@@ -1,0 +1,16 @@
+<div data-hook="admin_store_credit_category_form" class="align-center row">
+  <div class="col-6">
+    <%= f.field_container :name do %>
+      <%= f.label :name, class: 'required' %><br />
+      <%= f.text_field :name, class: 'fullwidth' %>
+      <%= f.error_message_on :name %>
+    <% end %>
+  </div>
+  <%# <div class="col-6"> %>
+  <%#   <%= f.field_container :presentation do %1> %>
+  <%#     <%= f.label :presentation, class: 'required' %1><br /> %>
+  <%#     <%= f.text_field :presentation, class: 'fullwidth' %1> %>
+  <%#     <%= f.error_message_on :presentation %1> %>
+  <%#   <% end %1> %>
+  <%# </div> %>
+</div>
