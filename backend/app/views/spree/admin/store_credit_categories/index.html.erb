@@ -31,6 +31,9 @@
             <% f.text_field :name %>
           <% end %>
         </td>
+        <td>
+          <%= thing.non_expiring? %>
+        </td>
         <td class="actions">
           <%= link_to_with_icon 'check', t('spree.actions.save'), api_store_credit_category_path(thing), no_text: true, data: { action: 'save' } %>
           <%= link_to_with_icon 'cancel', t('spree.actions.cancel'), nil, no_text: true, data: { action: 'cancel' } %>

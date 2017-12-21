@@ -7,7 +7,7 @@ class Spree.Views.Tables.EditableTable
   @append: (html) ->
     $row = $(html)
 
-    $('#images-table').removeClass('hidden').find('tbody').append($row)
+    $('#ttt').removeClass('hidden').find('tbody').append($row)
     $row.find('.select2').select2()
     $('.no-objects-found').hide()
 

@@ -1490,6 +1490,7 @@ en:
     new_stock_location: New Stock Location
     new_stock_movement: New Stock Movement
     new_store_credit: New Store Credit
+    new_store_credit_category: New Store Credit Category
     new_store: New Store
     new_tax_category: New Tax Category
     new_tax_rate: New Tax Rate
