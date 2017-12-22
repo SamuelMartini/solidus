@@ -18,7 +18,6 @@ module Spree
       get '/api/config'
       expect(response).to be_success
       expect(json_response["default_country_iso"]).to eq("US")
-      expect(json_response["default_country_id"]).to eq(default_country.code)
     end
   end
 end
