@@ -10,6 +10,10 @@ Carmen::Region.class_eval do
   def abbr
     code
   end
+
+  def country_iso
+    parent.code
+  end
 end
 
 Carmen::Country.class_eval do
@@ -25,5 +29,17 @@ Carmen::Country.class_eval do
 
   def states
     subregions
+  end
+
+  def numcode
+    numeric_code
+  end
+
+  def iso3
+    alpha_3_code
+  end
+
+  def iso_name
+    name
   end
 end
