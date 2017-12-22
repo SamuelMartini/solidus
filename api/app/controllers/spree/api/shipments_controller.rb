@@ -153,12 +153,8 @@ module Spree
         {
           order: {
             bill_address: {
-              state: {},
-              country: {}
             },
             ship_address: {
-              state: {},
-              country: {}
             },
             adjustments: {},
             payments: {

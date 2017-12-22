@@ -42,7 +42,7 @@ module Spree
       end
 
       it "can update own details" do
-        country = Carmen::country.coded('US')
+        country = Carmen::Country.coded('US')
         put spree.api_user_path(user.id), params: { token: user.spree_api_key, user: {
           email: "mine@example.com",
           bill_address_attributes: {
