@@ -127,7 +127,7 @@ module Spree
 
       @@country_attributes = [:iso_name, :iso, :iso3, :name, :numcode]
 
-      @@state_attributes = [:name, :abbr, :country_id]
+      @@state_attributes = [:name, :abbr, :country_iso]
 
       @@adjustment_attributes = [
         :id, :source_type, :source_id, :adjustable_type, :adjustable_id,
@@ -148,8 +148,8 @@ module Spree
       @@property_attributes = [:id, :name, :presentation]
 
       @@stock_location_attributes = [
-        :id, :name, :address1, :address2, :city, :state_id, :state_name,
-        :country_id, :zipcode, :phone, :active
+        :id, :name, :address1, :address2, :city, :state_iso, :state_name,
+        :country_iso, :zipcode, :phone, :active
       ]
 
       @@stock_movement_attributes = [:id, :quantity, :stock_item_id]
