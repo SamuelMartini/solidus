@@ -34,7 +34,7 @@ module Spree
     end
 
     alias :members :zone_members
-    accepts_nested_attributes_for :zone_members, allow_destroy: true, reject_if: proc { |a| a['zoneable'].blank? }
+    accepts_nested_attributes_for :zone_members, allow_destroy: true, reject_if: proc { |a| a['country_iso'].blank? }
 
     self.whitelisted_ransackable_attributes = ['description']
 
