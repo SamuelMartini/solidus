@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Spree
   describe Api::AddressBooksController, type: :request do
-    let!(:state) { create(:state) }
+    let!(:state) { Carmen::Country.coded('US').subregions.first }
     let!(:harry_address_attributes) do
       {
         'firstname' => 'Harry',
@@ -12,8 +12,8 @@ module Spree
         'city' => 'Surrey',
         'zipcode' => '10010',
         'phone' => '555-5555',
-        'state_id' => state.id,
-        'country_id' => state.country.id
+        'state_iso' => state.code,
+        'country_iso' => state.country.code
       }
     end
 
@@ -26,8 +26,8 @@ module Spree
         'city' => 'Devon, West Country',
         'zipcode' => '10010',
         'phone' => '555-5555',
-        'state_id' => state.id,
-        'country_id' => state.country.id
+        'state_iso' => state.code,
+        'country_iso' => state.country.code
       }
     end
 

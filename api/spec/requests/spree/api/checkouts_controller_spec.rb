@@ -7,8 +7,8 @@ module Spree
       stub_authentication!
       Spree::Config[:track_inventory_levels] = false
       country_zone = create(:zone, name: 'CountryZone')
-      @state = create(:state)
-      @country = @state.country
+      @country = Carmen::Country.coded('US')
+      @state = @country.subregions.first
       country_zone.members.create(zoneable: @country)
       create(:stock_location)
 
@@ -84,8 +84,8 @@ module Spree
             city:       'Bethesda',
             phone:      '3014445002',
             zipcode:    '20814',
-            state_id:   @state.id,
-            country_id: @country.id
+            state_iso:   @state.code,
+            country_iso: @country.code
           }
         end
 

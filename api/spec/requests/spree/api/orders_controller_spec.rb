@@ -16,7 +16,7 @@ module Spree
        :total_quantity, :display_item_total, :currency]
     }
 
-    let(:address_params) { { country_id: Country.first.id, state_id: State.first.id } }
+    let(:address_params) { { country_iso: 'US', state_iso: 'AL' } }
 
     let(:current_api_user) do
       user = Spree.user_class.new(email: "spree@example.com")
@@ -438,18 +438,18 @@ module Spree
       let!(:line_item) { order.contents.add(variant, 1) }
       let!(:payment_method) { create(:check_payment_method) }
 
-      let(:address_params) { { country_id: country.id } }
+      let(:address_params) { { country_iso: country.code } }
       let(:billing_address) {
         { firstname: "Tiago", lastname: "Motta", address1: "Av Paulista",
                                 city: "Sao Paulo", zipcode: "01310-300", phone: "12345678",
-                                country_id: country.id }
+                                country_iso: country.code }
       }
       let(:shipping_address) {
         { firstname: "Tiago", lastname: "Motta", address1: "Av Paulista",
                                  city: "Sao Paulo", zipcode: "01310-300", phone: "12345678",
-                                 country_id: country.id }
+                                 country_iso: country.code }
       }
-      let(:country) { create(:country, { name: "Brazil", iso_name: "BRAZIL", iso: "BR", iso3: "BRA", numcode: 76 }) }
+      let(:country) { Carmen::Country.coded('BR') }
 
       before { allow_any_instance_of(Order).to receive_messages user: current_api_user }
 

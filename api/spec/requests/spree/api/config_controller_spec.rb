@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Spree
   describe Api::ConfigController, type: :request do
-    let!(:default_country) { create :country, iso: "US"}
+    let!(:default_country) { Carmen::Country.coded('US') }
 
     before do
       stub_authentication!
@@ -18,7 +18,7 @@ module Spree
       get '/api/config'
       expect(response).to be_success
       expect(json_response["default_country_iso"]).to eq("US")
-      expect(json_response["default_country_id"]).to eq(default_country.id)
+      expect(json_response["default_country_id"]).to eq(default_country.code)
     end
   end
 end
