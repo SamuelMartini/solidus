@@ -19,7 +19,7 @@ RSpec.describe Spree::CreditCard, type: :model do
   it_behaves_like 'a payment source'
 
   before(:each) do
-    @order = create(:order)
+    @order = build_stubbed(:order)
     @payment = Spree::Payment.create(amount: 100, order: @order)
 
     @success_response = double('gateway_response', success?: true, authorization: '123', avs_result: { 'code' => 'avs-code' })

@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'spree/build_stubbed_candidate'
 
 RSpec.describe Spree::Carton do
   let(:carton) { create(:carton) }
@@ -16,9 +17,9 @@ RSpec.describe Spree::Carton do
       carton.tracking_url
     end
 
-    let(:carton) { create(:carton, shipping_method: shipping_method) }
+    let(:carton) { build_stubbed(:carton, shipping_method: shipping_method) }
     let(:shipping_method) do
-      create(:shipping_method, tracking_url: "https://example.com/:tracking")
+      build_stubbed(:shipping_method, tracking_url: "https://example.com/:tracking")
     end
 
     context "when tracking is not present" do
@@ -27,7 +28,7 @@ RSpec.describe Spree::Carton do
 
     context "when tracking is present" do
       let(:carton) do
-        create(:carton, shipping_method: shipping_method, tracking: "1Z12345")
+        build_stubbed(:carton, shipping_method: shipping_method, tracking: "1Z12345")
       end
 
       it "uses shipping method to determine url" do
@@ -83,7 +84,7 @@ RSpec.describe Spree::Carton do
   describe "#manifest" do
     subject { carton.manifest }
 
-    let(:carton) { create(:carton, inventory_units: [first_order.inventory_units, second_order.inventory_units].flatten) }
+    let(:carton) { build_stubbed(:carton, inventory_units: [first_order.inventory_units, second_order.inventory_units].flatten) }
     let(:first_order) { create(:order_ready_to_ship, line_items_count: 1) }
     let(:first_line_item) { first_order.line_items.first }
     let(:second_order) { create(:order_ready_to_ship, line_items_count: 1) }
@@ -100,7 +101,7 @@ RSpec.describe Spree::Carton do
     let(:carton) { create(:carton, inventory_units: [first_order.inventory_units, second_order.inventory_units].flatten) }
     let(:first_order) { create(:order_ready_to_ship, line_items_count: 1) }
     let(:first_line_item) { first_order.line_items.first }
-    let(:second_order) { create(:order_ready_to_ship, line_items_count: 1) }
+    let(:second_order) { build_stubbed(:order_ready_to_ship, line_items_count: 1) }
 
     it "contains only the items in both the carton and order" do
       expect(subject.map(&:line_item)).to eq [first_line_item]
@@ -110,9 +111,9 @@ RSpec.describe Spree::Carton do
   describe "#any_exchanges?" do
     subject { carton.any_exchanges? }
 
-    let(:carton) { create(:carton, inventory_units: [first_order.inventory_units, second_order.inventory_units].flatten) }
+    let(:carton) { build_stubbed(:carton, inventory_units: [first_order.inventory_units, second_order.inventory_units].flatten) }
     let(:first_order) { create(:order_ready_to_ship, line_items_count: 1) }
-    let(:second_order) { create(:order_ready_to_ship, line_items_count: 1) }
+    let(:second_order) { build_stubbed(:order_ready_to_ship, line_items_count: 1) }
 
     context "when any of the inventory has an original return item" do
       let(:return_item) { create(:return_item) }

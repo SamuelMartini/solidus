@@ -94,7 +94,7 @@ RSpec.describe Spree::StoreCreditEvent do
     subject { event.capture_action? }
 
     context "for capture events" do
-      let(:event) { create(:store_credit_capture_event) }
+      let(:event) { build_stubbed(:store_credit_capture_event) }
 
       it "returns true" do
         expect(subject).to eq true
@@ -102,7 +102,7 @@ RSpec.describe Spree::StoreCreditEvent do
     end
 
     context "for non-capture events" do
-      let(:event) { create(:store_credit_auth_event) }
+      let(:event) { build_stubbed(:store_credit_auth_event) }
 
       it "returns false" do
         expect(subject).to eq false

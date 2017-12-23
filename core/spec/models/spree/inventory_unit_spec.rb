@@ -69,7 +69,7 @@ RSpec.describe Spree::InventoryUnit, type: :model do
       other_variant_unit = shipment.inventory_units.build
       other_variant_unit.state = 'backordered'
       other_variant_unit.line_item = line_item
-      other_variant_unit.variant = create(:variant)
+      other_variant_unit.variant = build_stubbed(:variant)
       other_variant_unit.save!
 
       expect(Spree::InventoryUnit.backordered_for_stock_item(stock_item)).not_to include(other_variant_unit)

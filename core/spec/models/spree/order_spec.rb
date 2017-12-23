@@ -193,7 +193,7 @@ RSpec.describe Spree::Order, type: :model do
     before do
       create(:line_item, order: order)
       create(:shipment, order: order)
-      create(:adjustment, adjustable: order, order: order)
+      build_stubbed(:adjustment, adjustable: order, order: order)
       promotion.activate(order: order, promotion_code: code)
       order.recalculate
 

@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'shared_examples/calculator_shared_examples'
 
 RSpec.describe Spree::Calculator::DefaultTax, type: :model do
-  let(:address) { create(:address) }
+  let(:address) { build_stubbed(:address) }
   let!(:zone) { create(:zone, name: "Country Zone", countries: [tax_rate_country]) }
   let(:tax_rate_country) { address.country }
   let(:tax_category) { create(:tax_category) }
@@ -49,7 +49,7 @@ RSpec.describe Spree::Calculator::DefaultTax, type: :model do
       end
 
       context "when no line items match the tax category" do
-        let(:other_tax_category) { create(:tax_category) }
+        let(:other_tax_category) { build_stubbed(:tax_category) }
         let(:line_item_one_options) { { tax_category: other_tax_category } }
         let(:line_item_two_options) { { tax_category: other_tax_category } }
 
@@ -59,7 +59,7 @@ RSpec.describe Spree::Calculator::DefaultTax, type: :model do
       end
 
       context "when one item matches the tax category" do
-        let(:other_tax_category) { create(:tax_category) }
+        let(:other_tax_category) { build_stubbed(:tax_category) }
         let(:line_item_two_options) { { tax_category: other_tax_category } }
 
         it "should be equal to the item total * rate" do

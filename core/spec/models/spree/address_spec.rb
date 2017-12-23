@@ -206,7 +206,7 @@ RSpec.describe Spree::Address, type: :model do
     end
 
     context "with existing address" do
-      let(:existing_address) { create(:address) }
+      let(:existing_address) { build_stubbed(:address) }
 
       it "returns a new Address of merged data" do
         merged_attributes = subject.attributes.merge(new_address_attributes.symbolize_keys)
