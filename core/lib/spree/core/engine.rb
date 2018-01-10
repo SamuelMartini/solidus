@@ -33,6 +33,13 @@ module Spree
           %r{^number$}, # Credit Card number
           %r{^verification_value$} # Credit Card verification value
         ]
+
+        app.config.middleware.insert_before 0, Rack::Cors do
+          allow do
+            origins '*'
+            resource '*', :headers => :any, :methods => [:get, :post, :options]
+          end
+        end
       end
 
       initializer "spree.core.checking_migrations", before: :load_config_initializers do |_app|

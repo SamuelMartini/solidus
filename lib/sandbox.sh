@@ -37,6 +37,7 @@ fi
 cd ./sandbox
 echo "gem 'solidus', :path => '..'" >> Gemfile
 echo "gem 'solidus_auth_devise'" >> Gemfile
+echo "gem 'rack-cors', :require => 'rack/cors'" >> Gemfile
 
 cat <<RUBY >> Gemfile
 group :test, :development do
