@@ -1,5 +1,4 @@
 require 'spree/config'
-require 'rack/cors'
 
 module Spree
   module Core
