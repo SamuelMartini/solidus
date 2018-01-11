@@ -45,6 +45,8 @@ group :utils do
   gem 'launchy', require: false
 end
 
+gem 'rack-cors', require: 'rack/cors'
+
 gem 'rspec_junit_formatter', require: false, group: :ci
 
 custom_gemfile = File.expand_path("../Gemfile-custom", __FILE__)
